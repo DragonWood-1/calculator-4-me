@@ -1,0 +1,2947 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator 4 Me — 3,854 Calculators</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--sidebar:#f0f4ff;--card:#f5f7ff;--card2:#eaedfa;
+  --border:#d0d7f0;--text:#1a2140;--muted:#5a6a9a;--accent:#3a7ef5;
+  --accent2:#6c48f0;--green:#0a7c5c;--red:#d63550;--yellow:#b88a00;
+  --orange:#c96a10;--header-h:64px;
+}
+html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+a{color:inherit;text-decoration:none}
+/* ── HEADER ── */
+#header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:#fff;border-bottom:2px solid var(--border);
+  display:flex;align-items:center;gap:16px;padding:0 24px;z-index:100;
+  box-shadow:0 2px 12px rgba(58,126,245,.08);
+}
+#logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;letter-spacing:-0.5px}
+#logo span{font-size:12px;font-weight:500;-webkit-text-fill-color:var(--muted);display:block;line-height:1.2}
+#search-wrap{flex:1;max-width:820px;position:relative}
+#search{
+  width:100%;padding:11px 16px 11px 42px;border-radius:10px;
+  border:2px solid var(--border);background:#fff;color:var(--text);
+  font-size:15px;outline:none;transition:border .2s,box-shadow .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+#search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(58,126,245,.15)}
+#search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.5;color:var(--accent)}
+#count-badge{
+  margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap;
+  background:var(--card);padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-weight:600;
+}
+/* ── LAYOUT ── */
+#layout{height:calc(100vh - var(--header-h));margin-top:var(--header-h);overflow:hidden}
+/* ── MAIN ── */
+#main{height:100%;overflow-y:auto;padding:32px 24px;max-width:1400px;margin:0 auto;width:100%}
+#main::-webkit-scrollbar{width:6px}
+#main::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+/* ── HOME ── */
+#home-header{text-align:center;margin-bottom:32px}
+#home-header h1{font-size:36px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#home-header p{color:var(--muted);font-size:16px}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-bottom:40px}
+.cat-card{
+  background:var(--card);border:2px solid var(--border);border-radius:16px;
+  padding:30px 24px;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s;
+  text-align:center;
+}
+.cat-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 12px 32px rgba(58,126,245,.18);background:#fff}
+.cat-card .cc-icon{font-size:44px;margin-bottom:14px;display:block}
+.cat-card .cc-name{font-weight:800;font-size:17px;margin-bottom:6px;color:var(--text)}
+.cat-card .cc-count{font-size:13px;color:var(--muted);font-weight:500}
+/* ── CATEGORY / SUBCATEGORY VIEW ── */
+#view-header{margin-bottom:20px}
+#view-header h2{font-size:24px;font-weight:800;margin-bottom:4px}
+#view-header p{color:var(--muted);font-size:13px}
+.sub-section{margin-bottom:28px}
+.sub-section h3{
+  font-size:14px;font-weight:700;color:var(--accent);margin-bottom:12px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;
+}
+.sub-section h3 .sc{font-size:11px;color:var(--muted);font-weight:400}
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.calc-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.calc-card:hover{border-color:var(--accent);background:var(--card2)}
+.calc-card span{font-size:13px;line-height:1.3}
+.calc-card .arrow{opacity:.3;font-size:12px;flex-shrink:0;margin-left:8px}
+.calc-card:hover .arrow{opacity:.8}
+/* ── CALCULATOR VIEW ── */
+#calc-view{max-width:720px;margin:0 auto}
+#calc-view .cv-back{
+  display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+  font-size:13px;cursor:pointer;margin-bottom:20px;padding:6px 12px;
+  border-radius:6px;border:1px solid var(--border);background:var(--card);
+  transition:color .15s,border-color .15s;
+}
+#calc-view .cv-back:hover{color:var(--text);border-color:var(--accent)}
+#calc-view h2{font-size:26px;font-weight:800;margin-bottom:6px}
+#calc-view .breadcrumb{font-size:12px;color:var(--muted);margin-bottom:24px}
+#calc-view .breadcrumb span{color:var(--accent)}
+.calc-box{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;
+}
+.field-row{margin-bottom:18px}
+.field-row label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.field-row input,.field-row select{
+  width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card2);color:var(--text);font-size:15px;outline:none;transition:border .2s;
+}
+.field-row input:focus,.field-row select:focus{border-color:var(--accent)}
+.field-row .hint{font-size:11px;color:var(--muted);margin-top:4px}
+.calc-btn{
+  width:100%;padding:13px;border-radius:8px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-size:15px;font-weight:700;transition:opacity .15s,transform .1s;margin-bottom:20px;
+}
+.calc-btn:hover{opacity:.9;transform:translateY(-1px)}
+.result-box{
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  padding:20px;min-height:80px;display:flex;flex-direction:column;gap:10px;
+}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.result-row:last-child{border-bottom:none}
+.result-row .rl{font-size:13px;color:var(--muted)}
+.result-row .rv{font-size:18px;font-weight:700;color:var(--green)}
+.result-note{font-size:12px;color:var(--muted);line-height:1.5}
+.formula-box{
+  margin-top:20px;background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  padding:14px;font-size:12px;color:var(--muted);line-height:1.7;
+}
+.formula-box strong{color:var(--text);display:block;margin-bottom:6px;font-size:13px}
+/* ── SEARCH RESULTS ── */
+#search-results h2{font-size:20px;margin-bottom:16px;font-weight:700}
+#search-results .sr-count{color:var(--muted);font-size:13px;margin-bottom:18px}
+/* ── GENERIC CALC ── */
+.generic-inputs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  #main{padding:16px}
+  .cat-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .calc-grid{grid-template-columns:1fr}
+  .generic-inputs{grid-template-columns:1fr}
+}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;margin-right:6px}
+.tag-bio{background:#d4f5eb;color:#0a7c5c}
+.tag-chem{background:#ede8fd;color:#6c48f0}
+.tag-phys{background:#fdecd4;color:#c96a10}
+.no-result{text-align:center;padding:60px 20px;color:var(--muted)}
+.no-result .nr-icon{font-size:48px;margin-bottom:12px}
+/* ── LANGUAGE FOOTER ── */
+#lang-footer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#fff;border-top:2px solid var(--border);
+  padding:10px 24px;z-index:200;
+  box-shadow:0 -2px 16px rgba(58,126,245,.10);
+}
+#lang-inner{
+  display:flex;align-items:center;gap:16px;max-width:1400px;margin:0 auto;
+}
+#lang-label{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;display:flex;align-items:center;gap:6px}
+/* ── Custom flag dropdown ── */
+#lang-dropdown{position:relative;flex:1;max-width:440px}
+#lang-trigger{
+  display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;
+  border-radius:10px;border:2px solid var(--border);background:#fff;
+  cursor:pointer;transition:border .2s,box-shadow .2s;user-select:none;
+}
+#lang-trigger:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(58,126,245,.1)}
+#lang-trigger img{width:28px;height:20px;border-radius:3px;object-fit:cover;border:1px solid #dde}
+#lang-trigger .lt-name{font-size:14px;font-weight:600;color:var(--text);flex:1}
+#lang-trigger .lt-chevron{font-size:11px;color:var(--muted);transition:transform .2s}
+#lang-trigger.open .lt-chevron{transform:rotate(180deg)}
+#lang-panel{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:0;
+  background:#fff;border:2px solid var(--border);border-radius:12px;
+  box-shadow:0 -8px 32px rgba(0,0,0,.12);overflow:hidden;z-index:300;
+}
+#lang-panel.open{display:block}
+.lang-opt{
+  display:flex;align-items:center;gap:12px;padding:10px 16px;
+  cursor:pointer;transition:background .12s;border-bottom:1px solid var(--border);
+}
+.lang-opt:last-child{border-bottom:none}
+.lang-opt:hover{background:var(--card)}
+.lang-opt.active{background:#eef3ff}
+.lang-opt img{width:32px;height:22px;border-radius:3px;object-fit:cover;border:1px solid #dde;flex-shrink:0}
+.lang-opt .lo-name{font-size:14px;font-weight:600;color:var(--text)}
+.lang-opt .lo-native{font-size:12px;color:var(--muted);margin-left:4px}
+#lang-note{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+/* Push main content up so footer doesn't overlap */
+#layout{padding-bottom:56px}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="logo" onclick="goHome()" style="cursor:pointer">Calculator 4 Me<span>3,854 Calculators</span></div>
+  <div id="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search" type="search" placeholder="Search any calculator…" oninput="onSearch(this.value)" autocomplete="off">
+  </div>
+  <div id="count-badge">3,854 calculators</div>
+</div>
+
+<div id="layout">
+  <main id="main"></main>
+</div>
+
+<!-- ── LANGUAGE FOOTER ── -->
+<div id="lang-footer">
+  <div id="lang-inner">
+    <span id="lang-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+      Translate:
+    </span>
+
+    <div id="lang-dropdown">
+      <!-- Trigger button -->
+      <div id="lang-trigger" onclick="toggleLangPanel()">
+        <img id="lt-flag" src="https://flagcdn.com/28x21/us.png" alt="US">
+        <span class="lt-name" id="lt-name">Select Language</span>
+        <span class="lt-chevron">▼</span>
+      </div>
+
+      <!-- Dropdown panel (opens upward) -->
+      <div id="lang-panel">
+        <div class="lang-opt" data-lang="en"    data-flag="us"  data-name="English"    data-native="English"    onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/us.png"  alt="US"> <span class="lo-name">English</span></div>
+        <div class="lang-opt" data-lang="es"    data-flag="es"  data-name="Spanish"    data-native="Español"    onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/es.png"  alt="ES"> <span class="lo-name">Spanish</span> <span class="lo-native">Español</span></div>
+        <div class="lang-opt" data-lang="fr"    data-flag="fr"  data-name="French"     data-native="Français"   onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/fr.png"  alt="FR"> <span class="lo-name">French</span>  <span class="lo-native">Français</span></div>
+        <div class="lang-opt" data-lang="de"    data-flag="de"  data-name="German"     data-native="Deutsch"    onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/de.png"  alt="DE"> <span class="lo-name">German</span>  <span class="lo-native">Deutsch</span></div>
+        <div class="lang-opt" data-lang="it"    data-flag="it"  data-name="Italian"    data-native="Italiano"   onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/it.png"  alt="IT"> <span class="lo-name">Italian</span> <span class="lo-native">Italiano</span></div>
+        <div class="lang-opt" data-lang="pt"    data-flag="br"  data-name="Portuguese" data-native="Português"  onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/br.png"  alt="BR"> <span class="lo-name">Portuguese</span> <span class="lo-native">Português</span></div>
+        <div class="lang-opt" data-lang="zh-CN" data-flag="cn"  data-name="Chinese"    data-native="中文"        onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/cn.png"  alt="CN"> <span class="lo-name">Chinese</span> <span class="lo-native">中文</span></div>
+        <div class="lang-opt" data-lang="ja"    data-flag="jp"  data-name="Japanese"   data-native="日本語"      onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/jp.png"  alt="JP"> <span class="lo-name">Japanese</span> <span class="lo-native">日本語</span></div>
+        <div class="lang-opt" data-lang="ko"    data-flag="kr"  data-name="Korean"     data-native="한국어"      onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/kr.png"  alt="KR"> <span class="lo-name">Korean</span>  <span class="lo-native">한국어</span></div>
+        <div class="lang-opt" data-lang="ar"    data-flag="sa"  data-name="Arabic"     data-native="العربية"    onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/sa.png"  alt="SA"> <span class="lo-name">Arabic</span>  <span class="lo-native">العربية</span></div>
+        <div class="lang-opt" data-lang="ru"    data-flag="ru"  data-name="Russian"    data-native="Русский"    onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/ru.png"  alt="RU"> <span class="lo-name">Russian</span> <span class="lo-native">Русский</span></div>
+        <div class="lang-opt" data-lang="hi"    data-flag="in"  data-name="Hindi"      data-native="हिन्दी"     onclick="pickLang(this)"><img src="https://flagcdn.com/32x24/in.png"  alt="IN"> <span class="lo-name">Hindi</span>   <span class="lo-native">हिन्दी</span></div>
+      </div>
+    </div>
+
+    <span id="lang-note">Powered by Google Translate</span>
+  </div>
+</div>
+
+<div id="google_translate_element" style="display:none"></div>
+
+<script>
+// calc-data.js — 3,854 calculator definitions
+// Format: { "Category": { "Subcategory": ["Calculator Name", ...] } }
+const CALC_DATA = {
+
+// ─────────────────────────────────────────────────────────────────
+// BIOLOGY  [250]
+// ─────────────────────────────────────────────────────────────────
+"Biology": {
+  "Genetics": [
+    "Hardy-Weinberg Equilibrium","Allele Frequency","Gene Expression Level",
+    "DNA Melting Temperature","PCR Primer Tm","Restriction Enzyme Digest",
+    "DNA Molecular Weight","Protein Molecular Weight","Codon Frequency",
+    "GC Content","DNA to mRNA Transcription","mRNA to Protein Translation",
+    "Genetic Drift","Heritability (H²)","Linkage Disequilibrium (D′)",
+    "Mutation Rate","Chi-Square Genetics","Mendelian Ratio",
+    "Blood Type Probability","Pedigree Probability","SNP Density",
+    "Genome Size","Gene Copy Number","CRISPR Guide RNA Efficiency",
+    "Primer Design Tm","Annealing Temperature","DNA Concentration (ng/µL)",
+    "RNA Concentration","A260/A280 Ratio","Ligation Efficiency",
+    "Transformation Efficiency","Plasmid Copy Number","Sequencing Coverage",
+    "Mapping Quality Score","Variant Allele Frequency","Inheritance Probability",
+    "Polygenic Trait Probability","Population Genetics Fst","Phylogenetic Distance",
+    "Evolutionary Rate (dN/dS)"
+  ],
+  "Cell Biology": [
+    "Cell Doubling Time","Cell Density","Cell Viability (Trypan Blue)",
+    "Mitosis Index","Cell Cycle Phase Duration","Osmolarity",
+    "Membrane Potential (Nernst)","Action Potential Threshold","Diffusion Rate",
+    "Active Transport Rate","Protein Synthesis Rate","ATP Production",
+    "Cellular Respiration Rate","Photosynthesis Rate","Cell Surface-Area-to-Volume",
+    "Organelle Volume","Cytosol Concentration","Cell Compartment pH",
+    "Michaelis-Menten Km","Vmax","Enzyme Inhibition (IC50)",
+    "Competitive Inhibition Ki","Non-Competitive Inhibition","Hill Coefficient",
+    "Protein Concentration (Bradford)","BCA Protein Assay","Western Blot Quantification",
+    "Flow Cytometry Cell Count","Fluorescence Intensity","ELISA Concentration",
+    "Cell Proliferation Rate","Apoptosis Rate","Transfection Efficiency",
+    "Endocytosis Rate","Exocytosis Rate"
+  ],
+  "Ecology & Population": [
+    "Population Growth Rate","Carrying Capacity (K)","Predator-Prey Ratio",
+    "Shannon Diversity Index","Simpson Diversity Index","Species Richness",
+    "Biomass","Net Primary Production","Trophic Level Energy Transfer",
+    "Food Web Efficiency","Habitat Area Requirement","Minimum Viable Population",
+    "Island Biogeography Equilibrium","Lotka-Volterra Predation","Competition Coefficient (α)",
+    "Niche Overlap Index","Life Table Survival","Age-Structured Population",
+    "Mark-Recapture (Lincoln-Petersen)","Distance Sampling Density",
+    "Home Range (Kernel Density)","Dispersal Distance","Migration Rate",
+    "Metapopulation Patch Occupancy","Extinction Probability",
+    "Biodiversity Beta Diversity","Ecological Footprint",
+    "Trophic Cascade Effect","Keystone Species Impact Index","Edge Effect Area"
+  ],
+  "Physiology": [
+    "Basal Metabolic Rate (Mifflin-St Jeor)","Cardiac Output","Blood Pressure MAP",
+    "Glomerular Filtration Rate (CKD-EPI)","Respiratory Quotient","Tidal Volume",
+    "Minute Ventilation","Alveolar Ventilation","Physiological Dead Space",
+    "Oxygen Consumption (VO2)","CO2 Production (VCO2)","Fick's Law Diffusion",
+    "Henderson-Hasselbalch pH","Acid-Base Balance","Anion Gap",
+    "Serum Osmolality","Renal Clearance","Tubular Reabsorption Rate",
+    "Fluid Balance","Daily Caloric Need","Nitrogen Balance",
+    "Protein Turnover","Hormone Concentration","Insulin Sensitivity Index",
+    "Blood Glucose Conversion","Hemoglobin Saturation","O2-Hgb Dissociation P50",
+    "Blood Viscosity","Hematocrit","Mean Corpuscular Volume (MCV)",
+    "Platelet Function Score","Clotting Time","Muscle Force-Velocity",
+    "Joint Torque","Nerve Conduction Velocity","Synaptic Strength",
+    "Neurotransmitter Clearance","Sleep Cycle Timing","Circadian Phase",
+    "Thermoregulation Heat Balance"
+  ],
+  "Biochemistry": [
+    "Buffer Capacity (β)","Titration Equivalence Point","Acid Dissociation (Ka)",
+    "pH from Ka","pKa from Ka","Buffer pH (Henderson-Hasselbalch)",
+    "Protein Isoelectric Point","Amino Acid Net Charge","Peptide Mass",
+    "Protein Stability (ΔG)","Folding Free Energy","Binding Affinity (Kd)",
+    "Association Constant (Ka)","Gibbs Free Energy (ΔG°)","Equilibrium Constant (Keq)",
+    "Redox Potential (E°)","Electron Transport Chain Energy","Glycolysis ATP Yield",
+    "Krebs Cycle NADH","Fatty Acid Beta-Oxidation ATP","Gluconeogenesis Cost",
+    "Lipid Bilayer Thickness","Membrane Fluidity","Enzyme Activity (U/mL)",
+    "Specific Activity","Catalytic Efficiency (kcat/Km)","Reaction Rate",
+    "Arrhenius Rate Constant","Activation Energy (Ea)","Beer-Lambert Absorbance",
+    "Molar Extinction Coefficient","Fluorescence Quantum Yield","Calorimetry Heat",
+    "Osmotic Pressure (van't Hoff)","Sedimentation Coefficient (S)"
+  ],
+  "Microbiology": [
+    "Bacterial Growth Rate (μ)","Generation Doubling Time","Colony Forming Units (CFU)",
+    "Dilution Factor","Serial Dilution Concentration","Minimum Inhibitory Concentration",
+    "Antibiotic Kill Curve","Viral Load (copies/mL)","Infection Attack Rate",
+    "Basic Reproduction Number (R0)","Herd Immunity Threshold","Epidemic Doubling Time",
+    "Pathogen Infectious Dose","Biofilm Formation Rate","Quorum Sensing Threshold",
+    "Sporulation Probability","Conjugation Transfer Rate","Transformation Frequency",
+    "Phage Burst Size","Multiplicity of Infection (MOI)","Plaque Forming Units",
+    "TCID50","EID50","Sterilization D-Value",
+    "Pasteurization F-Value","Antimicrobial Log Reduction","Microbial Contamination Risk",
+    "Water Activity (aw)","Preservative Efficacy","Resistance Gene Frequency"
+  ],
+  "Molecular Biology": [
+    "DNA Replication Speed","Transcription Rate","Translation Rate",
+    "Open Reading Frame Length","Intron-Exon Ratio","miRNA Seed Binding Score",
+    "siRNA GC Content","CRISPR Off-Target Score","Cas9 Cleavage Efficiency",
+    "Base Editing Window","Epigenetic Methylation %","Histone Modification Level",
+    "ChIP-seq Enrichment","RNA-seq FPKM","RNA-seq TPM","RNA-seq RPKM",
+    "Fold Change (Log2)","p-value to Adjusted FDR","qPCR Delta-Delta Ct",
+    "qPCR Efficiency","Gel Migration Distance","Southern Blot Band Size",
+    "FISH Probe Tm","Microarray Signal Intensity","Mass Spec m/z",
+    "Proteomics Sequence Coverage","Metabolomics Peak Area","Pathway Z-score",
+    "Gene Ontology Enrichment p","Phylogenetic Tree Branch Length",
+    "BLAST Bit Score","Sequence Identity %","Structural RMSD",
+    "AlphaFold pLDDT Score","Protein-Protein Interaction Score",
+    "Coimmunoprecipitation Efficiency","CLIP-seq Binding Peak",
+    "Single-Cell UMI Count","Spatial Transcriptomics Spot Intensity",
+    "ATAC-seq Peak Score"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// CHEMISTRY  [200]
+// ─────────────────────────────────────────────────────────────────
+"Chemistry": {
+  "General Chemistry": [
+    "Molar Mass","Molarity (M)","Molality (m)","Normality (N)",
+    "Dilution (C1V1=C2V2)","Stoichiometry Mole Ratio","Limiting Reagent",
+    "Percent Yield","Theoretical Yield","Empirical Formula",
+    "Molecular Formula","Percent Composition","Moles to Grams",
+    "Grams to Moles","Moles to Atoms","Atoms to Moles",
+    "Gas Stoichiometry","Solution Concentration","Parts Per Million (PPM)",
+    "Parts Per Billion (PPB)","Osmotic Pressure","Vapor Pressure (Raoult's Law)",
+    "Boiling Point Elevation (ΔTb)","Freezing Point Depression (ΔTf)",
+    "Henry's Law Solubility","Ideal Gas Law (PV=nRT)","Boyle's Law",
+    "Charles's Law","Gay-Lussac's Law","Combined Gas Law",
+    "Van der Waals Gas","Dalton's Partial Pressure","Graham's Law Effusion",
+    "Mean Free Path","Kinetic Molecular Theory Speed","Avogadro Volume",
+    "Reaction Quotient (Q)","Equilibrium Constant (K)","Le Chatelier Shift",
+    "Solubility Product (Ksp)","Common Ion Effect"
+  ],
+  "Electrochemistry": [
+    "Nernst Equation Cell Potential","Standard Cell Potential","Electrolysis Charge (Q=It)",
+    "Faraday's Law Mass Deposited","Coulombic Efficiency","Battery Capacity (Ah)",
+    "Galvanic Cell Voltage","Oxidation State","Half-Reaction Potential",
+    "Redox Titration Equivalence","Corrosion Rate (mpy)","Cathodic Protection Current",
+    "Conductivity (σ)","Ion Mobility (μ)","Transport Number",
+    "Electroplating Mass","Overpotential (η)","Tafel Slope",
+    "Butler-Volmer Current Density","Impedance (Z)","Capacitance (CV)",
+    "Cyclic Voltammetry Peak","Diffusion-Limited Current","Exchange Current Density",
+    "Power Density"
+  ],
+  "Physical Chemistry & Thermodynamics": [
+    "Enthalpy Change (ΔH)","Entropy Change (ΔS)","Gibbs Free Energy (ΔG)",
+    "Helmholtz Free Energy (ΔA)","Heat Capacity (Cp/Cv)","Specific Heat",
+    "Heat of Combustion","Hess's Law Enthalpy","Bond Enthalpy Estimate",
+    "Lattice Energy (Born-Haber)","Clausius-Clapeyron Vapor Pressure","Van't Hoff Kp",
+    "Arrhenius Rate Constant (k)","Pre-Exponential Factor","Collision Theory Z",
+    "Transition State Eyring Equation","Quantum Yield","Beer-Lambert Absorbance",
+    "Molar Extinction Coefficient (ε)","Transmittance % T","Refractive Index (n)",
+    "Optical Rotation [α]","NMR Chemical Shift (δ)","IR Wavenumber",
+    "Raman Shift","Mass-to-Charge (m/z)","Isotope Pattern Abundance",
+    "Partition Function (q)","Boltzmann Population","de Broglie Wavelength",
+    "Heisenberg Uncertainty","Zero-Point Energy","Harmonic Oscillator Frequency",
+    "Radioactive Decay (λ)","Half-Life"
+  ],
+  "Acids & Bases": [
+    "pH from [H+]","pOH from [OH-]","Ka from pH","Kb from pKb",
+    "Weak Acid pH","Weak Base pH","Strong Acid pH","Strong Base pH",
+    "Buffer pH","Henderson-Hasselbalch","Acid-Base Titration mL",
+    "Equivalence Point pH","Polyprotic Acid pH","Conjugate Base pKa",
+    "Kw at Temperature","Acid Ionization %","Base Ionization %",
+    "Amphoteric Species pH","Lewis Acid Strength","Bronsted Acid Strength",
+    "Buffer Capacity (β)","Salt Hydrolysis pH","Isoelectric Point (pI)",
+    "Proton Transfer Equilibrium","Zwitterion Distribution"
+  ],
+  "Organic Chemistry": [
+    "Molecular Weight (Organic)","Degree of Unsaturation (DBE)","Index of Hydrogen Deficiency",
+    "Stereocenter Count","Chiral Center (R/S)","E/Z Alkene Configuration",
+    "Optical Rotation Specific","Enantiomeric Excess (ee %)","Diastereomeric Ratio",
+    "Reaction Gibbs Energy Organic","Nucleophilicity Scale","Electrophilicity Scale",
+    "SN1 vs SN2 Rate Ratio","E1 vs E2 Preference","Markovnikov Regioselectivity",
+    "Radical Chain Length","Diels-Alder Rate","Aromaticity Ring Current",
+    "Hückel 4n+2 Electrons","Resonance Stabilization Energy","Dipole Moment (μ)",
+    "Hydrogen Bond Strength","Van der Waals Energy","Partition Coefficient (logP)",
+    "Lipinski Ro5 Score","Bioavailability Estimate","Drug-Likeness Score",
+    "Hammett Sigma Constant","Taft Es Constant","pKa Organic Acid Prediction",
+    "Boiling Point Estimation","Melting Point Estimation","Solubility Parameter (δ)",
+    "Flash Point Estimate","Heat of Hydrogenation"
+  ],
+  "Analytical Chemistry": [
+    "Calibration Curve Concentration","Standard Addition","Recovery Rate %",
+    "Detection Limit (LOD)","Quantification Limit (LOQ)","Analytical Sensitivity",
+    "Selectivity Coefficient","Precision (RSD %)","Accuracy (Bias %)",
+    "Measurement Uncertainty (u)","Error Propagation","Significant Figures Rounding",
+    "Linear Regression (Analytical)","R-squared Fit","Chromatography Resolution (Rs)",
+    "Retention Factor (k')","Column Plate Number (N)","Peak Asymmetry Factor",
+    "Mass Spec Resolution","Elemental Analysis %CHN","Atomic Absorption Concentration",
+    "ICP-MS Detection Limit","XRD d-Spacing (Bragg)","BET Surface Area",
+    "Particle Size D50","Zeta Potential (ζ)","Dynamic Viscosity (η)",
+    "Kinematic Viscosity (ν)","Surface Tension (γ)","Contact Angle Wettability",
+    "Porosity %","Permeability (Darcy)","Diffusion Coefficient (D)",
+    "Solubility (g/L)","Distribution Ratio (D)","Ion Chromatography Equivalent",
+    "Titration Factor","Potentiometric Slope","Coulometry Faradaic Charge",
+    "Gravimetric Factor","Absorption Factor"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// CONSTRUCTION  [280]
+// ─────────────────────────────────────────────────────────────────
+"Construction": {
+  "Concrete & Masonry": [
+    "Concrete Volume (Slab)","Concrete Volume (Column)","Concrete Volume (Footing)",
+    "Concrete Mix Ratio","Cement Bags Needed","Sand Weight",
+    "Gravel Weight","Water-Cement Ratio","Compressive Strength Estimate",
+    "Rebar Weight","Rebar Spacing","Footing Size",
+    "Retaining Wall Thickness","Block Wall Block Count","Brick Count",
+    "Mortar Volume","Grout Volume","Tile Count",
+    "Paver Count","Curb Concrete","Driveway Concrete",
+    "Patio Slab","Pool Shell Concrete","Shotcrete Volume",
+    "Precast Panel Weight","Post-Tension Strand Force","Reinforcement Ratio",
+    "Concrete Repair Volume","Waterproofing Area","Expansion Joint Spacing",
+    "Epoxy Injection Volume","Anchor Bolt Pullout","Concrete Pump Output",
+    "Admixture Dosage","Slump Test Estimate"
+  ],
+  "Framing & Structural": [
+    "Lumber Board Feet","Stud Count (Wall)","Floor Joist Count",
+    "Rafter Length","Ridge Board Length","Header Size",
+    "Beam Span Capacity","Floor Joist Span","Roof Load",
+    "Snow Load","Wind Load (ASCE 7)","Seismic Base Shear",
+    "Dead Load","Live Load","Combined Factored Load",
+    "Column Axial Capacity","Footing Bearing Pressure","Shear Wall Length",
+    "Diaphragm Shear","Bolt Shear Capacity","Weld Size",
+    "Deck Joist Spacing","Stair Rise & Run","Handrail Height",
+    "Post Bearing Capacity","Ledger Bolt Pattern","Rim Joist Size",
+    "Blocking Interval","LVL Beam Size","Steel W-Beam Capacity",
+    "I-Beam Deflection","Glulam Beam Size","Timber Frame Joint",
+    "Truss Span","Roof Truss Loading"
+  ],
+  "Roofing": [
+    "Roof Area (Hip)","Roof Area (Gable)","Roofing Squares",
+    "Shingles Needed","Roof Pitch (Rise/Run)","Rafter Length",
+    "Hip Rafter Length","Valley Rafter Length","Mansard Roof Area",
+    "Flat Roof Drainage","Metal Panel Count","Clay Tile Count",
+    "Slate Tile Count","Underlayment Rolls","Ice & Water Shield Area",
+    "Ridge Vent Length","Eave Vent Area","Skylight Rough Opening",
+    "Flashing Length","Gutter Size","Downspout Count",
+    "Fascia Linear Feet","Soffit Area","Drip Edge Length",
+    "Ridge Cap Shingles"
+  ],
+  "Electrical": [
+    "Wire Gauge (Ampacity)","Voltage Drop %","Circuit Breaker Size",
+    "Electrical Load (Watts)","Panel Load Schedule","Conduit Fill %",
+    "Box Fill Conductor Count","Junction Box Size","Outlet Circuit Count",
+    "Lighting Power Density","Lumens Needed","Foot-candles to Lumens",
+    "LED Wattage Savings","Monthly Electricity Cost","Power Factor Correction",
+    "Motor Full-Load Amps","Transformer KVA","Generator Size (kW)",
+    "Battery Backup Runtime","Solar Array Size","Grid-Tie Inverter Size",
+    "GFCI Outlet Spacing","AFCI Breaker Coverage","Ground Wire Size",
+    "Neutral Wire Ampacity","Grounding Electrode Conductor","EMF Field Strength",
+    "Service Entrance Size","Demand Factor","Short Circuit Current"
+  ],
+  "Plumbing": [
+    "Pipe Diameter (Flow Rate)","Flow Velocity","Pressure Drop (Hazen-Williams)",
+    "Water Heater Recovery","Drain Pipe Size (DFU)","Vent Stack Diameter",
+    "Fixture Unit Total","Water Supply Pressure","Septic Tank Size",
+    "Leach Field Area","Sump Pump GPH","Water Softener Grain Capacity",
+    "Filter Flow Rate","Pump Total Head","GPM from Fixture Count",
+    "PSI to Feet of Head","Water Hammer Pressure","Pipe Insulation Thickness",
+    "Hot Water Heat Loss","Radiant Floor Tubing","Hydronic BTU Output",
+    "Boiler Output (BTU)","Daily Water Usage","Irrigation GPM",
+    "Backflow Preventer Size"
+  ],
+  "HVAC": [
+    "AC Size (BTU/h)","Heating Load (Manual J)","Cooling Load",
+    "SEER Efficiency","EER Rating","COP Heat Pump",
+    "Duct Size (CFM)","Static Pressure Drop","Fan Selection (CFM/SP)",
+    "Ventilation Rate (ASHRAE 62)","Air Changes Per Hour","Humidity Ratio (w)",
+    "Dew Point Temperature","Heat Pump Balance Point","Furnace Output (BTU)",
+    "Boiler Radiator Size","Chiller Tons","Cooling Tower Range",
+    "Economizer Savings","VRF Capacity","Mini-Split BTU",
+    "Zone Damper CFM","Thermostat Setback Savings","Energy Recovery Ventilator",
+    "HRV Efficiency","Air Handler CFM","Filter Pressure Drop",
+    "R-Value per Inch","Total Wall R-Value","Infiltration ACH"
+  ],
+  "Flooring": [
+    "Floor Area (sq ft)","Carpet Rolls Needed","Hardwood Plank Count",
+    "Laminate Pack Count","Vinyl Sheet Area","Floor Tile Count",
+    "Grout Coverage","Adhesive Coverage","Underlayment Rolls",
+    "Transition Strip Length","Baseboard Linear Feet","Threshold Pieces",
+    "Stair Nose Pieces","Waste Factor %","Pattern Repeat Match",
+    "Diagonal Layout Extra %","Herringbone Tile Count","Parquet Block Count",
+    "Epoxy Coverage","Concrete Resurfacer Area"
+  ],
+  "Painting & Finishing": [
+    "Paint Gallons (Wall)","Paint Gallons (Ceiling)","Paint Gallons (Trim)",
+    "Exterior Paint Gallons","Spray Paint Coverage","Texture Hopper Load",
+    "Stucco Mix Volume","Drywall Sheet Count","Joint Compound Buckets",
+    "Drywall Tape Length","Sandpaper Sheet Count","Caulk Tubes Needed",
+    "Sealant Coverage","Varnish Coats Coverage","Wood Stain Gallons",
+    "Wallpaper Rolls","Wallpaper Border Length","Primer Gallons",
+    "Epoxy Coating Coverage","Concrete Sealer Area"
+  ],
+  "Earthwork & Site": [
+    "Excavation Volume (Cut)","Cut and Fill Balance","Soil Swell Factor",
+    "Compaction Density","Grading Slope %","Grade Change Calculator",
+    "Surface Drainage Slope","Erosion Loss (USLE)","Topsoil Depth Volume",
+    "Fill Dirt Cubic Yards","Crushed Stone Volume","Subgrade Bearing",
+    "Geotextile Area","Retaining Wall Lateral Earth Pressure","Slope Stability Factor",
+    "Bearing Capacity (Terzaghi)","Percolation Rate","Stormwater Runoff (Rational Method)",
+    "Detention Pond Volume","Bioswale Size","Culvert Size (Manning's n)",
+    "Ditch Flow Capacity","Trench Spoil Volume","Pavement Section Thickness","Subbase Depth"
+  ],
+  "Landscaping & Outdoor": [
+    "Mulch Cubic Yards","Compost Volume","Sod Square Yards",
+    "Grass Seed Pounds","Fertilizer Application Rate","Sprinkler Coverage",
+    "Drip Emitter Flow","Fence Post Count","Fence Panel Count",
+    "Deck Square Footage","Pool Water Volume","Koi Pond Volume",
+    "Pond Liner Size","Fountain Pump GPH","Waterfall Flow Rate",
+    "Retaining Wall Block Count","Walkway Paver Count","Garden Bed Soil Volume",
+    "Tree Spacing Grid","Planting Density per Acre","Landscape Rock Tons",
+    "Playground Fall Zone","Sports Court Dimensions","Tennis Net Height",
+    "Parking Stall Count","Asphalt Tons","Parking Lot Drainage",
+    "Outdoor Lighting Foot-candles","Irrigation Efficiency","Rain Garden Size",
+    "Green Roof Load","Living Wall Irrigation","Tree Root Zone Area",
+    "Erosion Blanket Area","Slope Revegetation Seed Rate"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// CONVERSION  [250]
+// ─────────────────────────────────────────────────────────────────
+"Conversion": {
+  "Length": [
+    "Meters to Feet","Feet to Meters","Inches to Centimeters",
+    "Centimeters to Inches","Miles to Kilometers","Kilometers to Miles",
+    "Yards to Meters","Meters to Yards","Feet to Inches",
+    "Inches to Feet","Millimeters to Inches","Inches to Millimeters",
+    "Nautical Miles to Miles","Light Years to Miles","Astronomical Units to km",
+    "Parsecs to Light Years","Angstroms to Nanometers","Microns to Millimeters",
+    "Furlongs to Miles","Fathoms to Meters","Leagues to Miles",
+    "Cubits to Inches","Hands to Inches","Chains to Meters","Rods to Feet"
+  ],
+  "Weight & Mass": [
+    "Pounds to Kilograms","Kilograms to Pounds","Ounces to Grams",
+    "Grams to Ounces","Short Tons to Kilograms","Metric Tons to Pounds",
+    "Stone to Pounds","Pounds to Stone","Milligrams to Grams",
+    "Micrograms to Milligrams","Carats to Grams","Troy Ounces to Grams",
+    "Short Tons to Long Tons","Long Tons to Metric Tons","Slugs to Kilograms",
+    "Atomic Mass Units to Grams","Grains to Milligrams","Drams to Grams",
+    "Pennyweights to Grams","Quintals to Kilograms","Hundredweights to Pounds",
+    "Kilograms to Newtons","Pounds-force to Newtons","Newtons to Dynes","Dynes to Newtons"
+  ],
+  "Temperature": [
+    "Celsius to Fahrenheit","Fahrenheit to Celsius","Celsius to Kelvin",
+    "Kelvin to Celsius","Fahrenheit to Kelvin","Kelvin to Fahrenheit",
+    "Rankine to Fahrenheit","Delisle to Celsius","Newton to Celsius","Réaumur to Celsius"
+  ],
+  "Volume": [
+    "Liters to US Gallons","US Gallons to Liters","Cubic Feet to Gallons",
+    "Cubic Meters to Cubic Feet","Milliliters to Fluid Ounces","Fluid Ounces to Milliliters",
+    "Cups to Milliliters","Milliliters to Cups","Tablespoons to Milliliters",
+    "Teaspoons to Milliliters","Pints to Liters","Quarts to Liters",
+    "Cubic Inches to Cubic Centimeters","Cubic Centimeters to Cubic Inches","Oil Barrels to Liters",
+    "Hogsheads to Gallons","Fluid Drams to Milliliters","Minims to Milliliters",
+    "Bushels to Liters","Pecks to Quarts","Gills to Milliliters",
+    "Firkins to Gallons","Kiloliters to Cubic Meters","Acre-Feet to Gallons","Board Feet to Cubic Feet"
+  ],
+  "Speed": [
+    "MPH to KPH","KPH to MPH","Knots to MPH",
+    "MPH to Knots","Meters per Second to MPH","Feet per Second to MPH",
+    "Mach Number to MPH","Speed of Light Fraction","Furlongs per Fortnight to MPH",
+    "RPM to Linear Speed","Angular Velocity (rpm to rad/s)","Velocity Components (vx/vy)",
+    "Escape Velocity Check","Orbital Speed","Flow Speed (Pipe)"
+  ],
+  "Pressure": [
+    "PSI to Bar","Bar to PSI","Atmospheres to PSI",
+    "Pascals to PSI","mmHg to kPa","Torr to Pascal",
+    "Inches of Mercury to kPa","Inches of Water Column to Pa","Kilopascals to Bar",
+    "Megapascals to PSI","Technical Atmospheres to bar","Barometric Pressure (inHg to hPa)",
+    "Vacuum Pressure (% vacuum)","Gauge to Absolute Pressure","Absolute to Gauge Pressure"
+  ],
+  "Energy": [
+    "Joules to Calories","Calories to Joules","BTU to Joules",
+    "Kilowatt-Hours to MJ","Electron Volts to Joules","Ergs to Joules",
+    "Foot-Pounds to Joules","Newton-Meters to Joules","Watt-Hours to BTU",
+    "Kilocalories to Kilojoules","Horsepower-Hours to kWh","Therms to kWh",
+    "Quads to Petajoules","Terajoules to MMBTU","Megawatt-Hours to GJ",
+    "Gigajoules to MMBTU","Tonnes of Oil Equivalent to GJ","Dekatherms to MBtu",
+    "MMBTU to GJ","Rydbergs to eV"
+  ],
+  "Power": [
+    "Watts to Horsepower","Horsepower to Watts","Kilowatts to BTU/hour",
+    "BTU/hour to Watts","Megawatts to GW","Calories/Second to Watts",
+    "Foot-Pounds/Minute to Watts","Torque × RPM to kW","Metric Horsepower to Watts",
+    "Boiler Horsepower to kW","Electrical Horsepower to kW","Refrigeration Tons to kW",
+    "Cheval Vapeur to kW","Pferdestarke to kW","Lusec to Watts"
+  ],
+  "Area": [
+    "Square Feet to Square Meters","Square Meters to Square Feet","Acres to Square Feet",
+    "Square Feet to Acres","Hectares to Acres","Square Miles to km²",
+    "Square Kilometers to Acres","Square Yards to Square Meters","Square Inches to cm²",
+    "Square Centimeters to in²","Ares to Square Meters","Roods to Acres",
+    "Dunams to Hectares","Manzanas to Hectares","Feddans to Acres"
+  ],
+  "Digital Storage": [
+    "Bytes to Kilobytes","Kilobytes to Megabytes","Megabytes to Gigabytes",
+    "Gigabytes to Terabytes","Terabytes to Petabytes","Bits to Bytes",
+    "Nibbles to Bytes","Kibibytes to Kilobytes","Mebibytes to Megabytes",
+    "Gibibytes to Gigabytes","Tebibytes to Terabytes","Data Transfer Rate (Mbps to MB/s)",
+    "Bandwidth to Download Time","Storage Cost per GB","Download Time Estimator"
+  ],
+  "Angle": [
+    "Degrees to Radians","Radians to Degrees","Gradians to Degrees",
+    "Minutes of Arc to Degrees","Seconds of Arc to Degrees","Mils to Degrees",
+    "Revolutions to Degrees","Compass Bearing to Degrees","DMS to Decimal Degrees",
+    "Decimal Degrees to DMS"
+  ],
+  "Time": [
+    "Hours to Minutes","Minutes to Seconds","Days to Hours",
+    "Weeks to Days","Months to Days","Years to Days",
+    "Seconds to Milliseconds","Milliseconds to Microseconds","Microseconds to Nanoseconds",
+    "Unix Timestamp to Date","Julian Date to Calendar","Day of Year Calculator",
+    "Business Days to Calendar Days","Time Zone Offset","Work Hours to Decimal"
+  ],
+  "Fuel Economy": [
+    "MPG to L/100km","L/100km to MPG","Miles per Gallon (Imperial vs US)",
+    "km per Liter to MPG","Fuel Efficiency Score","CO2 per Mile",
+    "Fuel Cost per 100 Miles","Annual Fuel Cost","EV kWh per 100 Miles","Range Estimator"
+  ],
+  "Number Systems": [
+    "Binary to Decimal","Decimal to Binary","Hexadecimal to Decimal",
+    "Decimal to Hexadecimal","Octal to Decimal","Decimal to Octal",
+    "Binary to Hexadecimal","Hexadecimal to Binary","Base-N Converter",
+    "ASCII to Character","Unicode Code Point","Roman Numerals to Decimal",
+    "Decimal to Roman Numerals","Scientific Notation","Standard Form (UK)",
+    "Number to Words","Egyptian Numerals","Babylonian Numerals",
+    "Base-12 (Dozenal)","Base-60 (Sexagesimal)"
+  ],
+  "Concentration": [
+    "Molarity to Normality","PPM to mg/L","Percent to PPM",
+    "PPB to PPM","Density to Concentration","Weight/Volume % (w/v)",
+    "Volume/Volume % (v/v)","Weight/Weight % (w/w)","Mole Fraction","Activity Coefficient"
+  ],
+  "Cooking Conversions": [
+    "Cups to Tablespoons","Tablespoons to Teaspoons","Fluid Ounces to Cups",
+    "Pounds to Kilograms (Recipe)","Metric to Imperial Cooking"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// ECOLOGY  [150]
+// ─────────────────────────────────────────────────────────────────
+"Ecology": {
+  "Environmental Impact": [
+    "Personal Carbon Footprint","CO2 Emissions from Fuel","Carbon Offset Cost",
+    "Greenhouse Gas (CO2e)","Forest Carbon Sequestration","Methane Global Warming Potential",
+    "NOx Emissions Factor","Air Quality Index (AQI)","PM2.5 Concentration",
+    "VOC Emissions Rate","Environmental Impact Score","Ecological Debt Day",
+    "National Biocapacity","Overshoot Calculation","Deforestation Annual Rate",
+    "Reforestation Carbon Credit","Wetland Ecosystem Value","Ocean Acidification pH",
+    "Sea Level Rise Rate","Permafrost Carbon Release",
+    "Glacier Mass Balance","Ice Sheet Volume Change","Albedo Forcing Effect",
+    "Radiative Forcing (W/m²)","Climate Sensitivity"
+  ],
+  "Water Resources": [
+    "Personal Water Footprint","Household Water Usage","Rainwater Harvest Volume",
+    "Greywater Reuse Savings","Watershed Runoff","Curve Number Runoff (CN)",
+    "Infiltration Rate (Green-Ampt)","Reference Evapotranspiration (ET0)",
+    "Stream Discharge (Manning)","River Annual Flow Volume","100-Year Flood Peak",
+    "Palmer Drought Index","Groundwater Recharge Rate","Aquifer Depletion Years",
+    "Well Yield (GPM)","Water Quality Index (WQI)","Turbidity NTU",
+    "BOD5 Oxygen Demand","COD to BOD Ratio","Dissolved Oxygen Saturation",
+    "Nutrient Loading (N/P)","Eutrophication Trophic Index","Salinity PSU",
+    "Water Hardness (gpg)","RO Membrane Rejection %"
+  ],
+  "Energy & Climate": [
+    "Solar Irradiance (kWh/m²)","Wind Power Density","Geothermal Heat Flow",
+    "Small Hydropower Output","Tidal Range Energy","Wave Power (kW/m)",
+    "Biomass Energy Content","Biodiesel Yield","Energy Intensity (MJ/GDP)",
+    "Renewable Energy Fraction %","Grid Emission Factor (kg CO2/kWh)","Energy Storage Hours",
+    "LCOE (Levelized Cost of Energy)","Carbon Price ($/tonne)","Cap-and-Trade Permit Cost",
+    "Carbon Tax Revenue","Green Bond Yield Spread","ESG Risk Score",
+    "Physical Climate Risk","Net Zero Pathway","Paris Agreement Budget",
+    "Scope 1/2/3 Emissions","Power Purchase Agreement Price",
+    "Demand Response Savings","Smart Grid Efficiency"
+  ],
+  "Biodiversity & Ecosystems": [
+    "Species-Area Relationship","Extinction Probability (PVA)","IUCN Red List Score",
+    "Allelic Richness","Population Viability Years","Habitat Suitability Index",
+    "Habitat Fragmentation Index","Wildlife Corridor Width","Edge Effect Depth",
+    "Core Habitat Area","Landscape Connectivity","Ecosystem Service Value",
+    "Biodiversity Hotspot Score","Endemism Rate","Rarity Index",
+    "Invasion Risk Score","Invasive Species Spread Rate","Ecological Restoration Progress",
+    "Rewilding Area Needed","Pollinator Abundance Index","Soil Microbial Biomass",
+    "Marine Trophic Index","Freshwater Macroinvertebrate Score","Insect Biomass Decline Rate",
+    "Wildlife Population Trend"
+  ],
+  "Pollution & Waste": [
+    "Plastic Footprint (kg/year)","Municipal Waste Generation Rate","Recycling Diversion Rate",
+    "Landfill Gas (LFG) Volume","Incineration CO2 Emission","Noise Level Attenuation (dB)",
+    "Light Pollution Bortle Class","Soil Contamination Risk","Heavy Metal Leachate",
+    "Pesticide Risk Quotient","Microplastic Concentration","Ocean Plastic Mass",
+    "E-Waste Recycling Rate","Hazardous Waste Manifest","Industrial Effluent BOD",
+    "Wastewater Treatment Efficiency","Composting Volume Reduction","Anaerobic Digestion Biogas",
+    "Biogas Energy Output","Waste Heat Recovery kWh","Material Flow Analysis",
+    "Circular Economy Rate","Life Cycle CO2 Assessment","Product Carbon Footprint",
+    "Supply Chain Emissions Scope 3"
+  ],
+  "Sustainable Living": [
+    "Home Carbon Budget","Zero Waste Progress %","Vegan Diet CO2 Saving",
+    "Food Miles Emissions","Local vs Import Carbon","Organic Farming Benefit",
+    "Slow Fashion Garment Impact","Secondhand CO2 Saving","Green Travel Mode",
+    "EV vs ICE Lifetime CO2","Cycling vs Driving Saving","Public Transit Saving",
+    "Home Energy Audit Score","Solar Payback Period","LED Lighting Saving",
+    "Smart Thermostat Saving","Home Insulation ROI","Double Glazing Saving",
+    "Green Mortgage Rate Saving","Sustainable Garden Water","Permaculture Yield",
+    "Community Garden Output","Seed Saving Value","Backyard Beehive Output","Vermicompost Rate"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// EVERYDAY LIFE  [320]
+// ─────────────────────────────────────────────────────────────────
+"Everyday Life": {
+  "Date & Time": [
+    "Age Calculator","Date Difference","Days Until Event",
+    "Day of Week","Leap Year","Time Zone Converter",
+    "Business Days Counter","Countdown Timer","Wedding Anniversary Date",
+    "Retirement Date Estimator","Project Deadline","Time Elapsed",
+    "Quarter of Year","Fiscal Year Calendar","Season Finder",
+    "Moon Phase","Sunrise & Sunset Time","Daylight Hours",
+    "Daylight Saving Adjustment","Julian Day Number","Hebrew Calendar Date",
+    "Islamic Hijri Date","Chinese Lunar Date","Western Zodiac Sign",
+    "Chinese Zodiac Year","Life Path Numerology","Biorhythm Cycle",
+    "Lucky Number","Birth Number Numerology","Days Alive Counter"
+  ],
+  "Travel": [
+    "Road Trip Distance","Road Trip Fuel Cost","Flight Travel Time",
+    "Jet Lag Recovery Days","Currency Exchange Rate","Hotel Nightly Rate Total",
+    "Travel Budget Planner","Luggage Weight Limit","Passport Validity Check",
+    "Visa Application Fee","Travel Insurance Cost","Car Rental Total Cost",
+    "Parking Daily Cost","Toll Road Cost","Map Scale Distance",
+    "GPS Coordinate Distance","Magnetic Bearing","Hiking Trail Time",
+    "Elevation Gain Effort","Walking Speed Pace","Cycling Average Speed",
+    "Train Journey Time","Bus Fare Estimator","Taxi Fare Estimate",
+    "Rideshare Price Estimate","Frequent Flyer Miles Needed","Baggage Fee Calculator",
+    "Time at Destination","Refueling Stop Planner","Campsite Cost"
+  ],
+  "Home & Family": [
+    "Mortgage Monthly Payment","Rent vs Buy Comparison","Home Affordability",
+    "House Listing Price","Property Tax Estimate","Home Equity",
+    "Refinancing Break-Even","Moving Cost Estimate","Storage Unit Monthly Cost",
+    "Monthly Utilities Budget","Electricity Bill Estimate","Natural Gas Bill",
+    "Water & Sewer Bill","Internet & Phone Cost","Home Insurance Premium",
+    "HOA Monthly Fee","Annual Maintenance Budget","Home Improvement ROI",
+    "Paint Quantity (Room)","Flooring Material Cost","Landscaping Project Cost",
+    "Pool Chemical Monthly Cost","Pet Annual Cost","Childcare Monthly Cost",
+    "K-12 Education Cost","College Tuition Savings","Weekly Allowance Rate",
+    "Family Monthly Budget","Grocery Budget per Person","Household Size Estimate"
+  ],
+  "Shopping": [
+    "Discount Price","Sale Price After %","Percentage Savings",
+    "Coupon Stack Savings","Sales Tax Total","Price with Tax",
+    "Price per Unit","Unit Price Comparison","Bulk Buy Savings",
+    "Subscription vs One-Time","Price Drop Alert %","Comparison Shopping Score",
+    "Gift Budget Split","Black Friday Deal Value","Cashback Amount",
+    "Rewards Points Value","Credit Card Cashback Rate","Loyalty Tier Points",
+    "Return Window Deadline","Shipping Cost Estimate","Import Duty",
+    "VAT Amount","GST Amount","Total Landed Cost","Impulse Purchase True Cost"
+  ],
+  "Vehicle": [
+    "Car Loan Monthly Payment","Auto Lease Monthly Payment","Car Depreciation Value",
+    "Trade-In Value Estimate","Total Cost of Ownership","Fuel Cost per Mile",
+    "Gas Tank Refill Cost","MPG Tracker","Car Insurance Estimate",
+    "Vehicle Registration Fee","Oil Change Mileage Interval","Tire Rotation Schedule",
+    "Brake Pad Life Remaining","12V Battery Health","Engine Oil Life %",
+    "Coolant Flush Interval","Transmission Service Mileage","Tune-Up Cost",
+    "Repair Cost vs Value","EV Charging Cost","EV Battery Range",
+    "Hybrid Real-World MPG","Carpool Cost Split","Daily Commute Cost",
+    "Speeding Fine Estimate","DUI Financial Cost","Accident Repair Cost",
+    "Mileage Reimbursement","Fleet Vehicle Cost","Lease vs Buy Break-Even"
+  ],
+  "Fun & Entertainment": [
+    "Movie Rating Aggregate","Book Reading Time","Podcast Episode Length",
+    "Netflix Binge Time","Video Game Hours","Party Cost Per Person",
+    "Wedding Total Budget","Birthday Age in Days","Gift Budget per Person",
+    "Lottery Jackpot Odds","Slot Machine RTP","Casino House Edge",
+    "Poker Pot Odds","Blackjack Basic Strategy EV","Roulette Expected Value",
+    "Sports Bet Implied Probability","Fantasy League Score","Trivia Correct %",
+    "Escape Room Completion Time","Bowling Handicap","Golf Handicap Index",
+    "Chess ELO Rating Change","Scrabble Tile Score","Boggle Point Calculator",
+    "Word Count to Pages","Reading Level (Flesch-Kincaid)","Typing Speed (WPM)",
+    "Streaming Data Usage","Concert Ticket Total Cost","Theme Park Budget"
+  ],
+  "Social & Relationships": [
+    "Relationship Anniversary Days","Date Night Budget","Wedding Anniversary Name",
+    "Baby Name Popularity Rank","Family Generation Count","Age Difference (Couples)",
+    "Social Media Engagement Rate","Instagram Follower Growth","YouTube Revenue Estimate",
+    "TikTok Views Monetization","Influencer CPM Rate","Email Open Rate Benchmark",
+    "Click-Through Rate (CTR)","Conversion Rate Optimization","A/B Test Significance",
+    "Survey Margin of Error","Net Promoter Score","Customer Satisfaction CSAT",
+    "Employee Satisfaction Score","Team Meeting Cost","Conference ROI",
+    "Networking Event Value","Volunteer Hours Value","Gift Giving Reciprocity","Friendship Score"
+  ],
+  "Personal Productivity": [
+    "Tip Calculator","Bill Split (Equal)","Bill Split (Proportional)",
+    "Restaurant Group Tab","Coffee Monthly Cost","Cigarette Annual Cost",
+    "Alcohol Units per Week","Sleep Debt Hours","Procrastination True Cost",
+    "Hourly Productivity Rate","Study Session Timing","Assignment Due Date",
+    "Grade Average Calculator","Weighted GPA","Test Curve Score",
+    "Class Rank Estimate","Study Hours for Grade","Goal Milestone Dates",
+    "Habit Formation Days","Decision Matrix Score","Time Budget per Task",
+    "Meeting Attendee Cost","Email Response Time","Focus Block Schedule","Deep Work Hours"
+  ],
+  "Weather & Environment": [
+    "Wind Chill Temperature","Heat Index","Dew Point Comfort",
+    "UV Index Exposure Time","Feels-Like Temperature","Relative Humidity",
+    "Barometric Pressure Trend","Precipitation Probability","Snow Depth Water Equivalent",
+    "Flash Flood Rainfall Rate","Wildfire Spread Rate","Hurricane Category Wind Speed",
+    "Tornado Fujita Scale","Earthquake Magnitude Energy","Avalanche Risk Score",
+    "Beach Wave Height","Lightning Strike Distance","Rainbow Angle"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// FINANCE  [380]
+// ─────────────────────────────────────────────────────────────────
+"Finance": {
+  "Banking & Savings": [
+    "Simple Interest","Compound Interest","Annual Percentage Yield (APY)",
+    "Annual Percentage Rate (APR)","Savings Goal Timeline","Emergency Fund Size",
+    "CD (Certificate of Deposit)","High-Yield Savings Return","Money Market Return",
+    "Treasury Bill Yield","I-Bond Composite Rate","EE Bond Value",
+    "Fixed Deposit Maturity","Recurring Deposit Total","Bank Account Interest",
+    "Wire Transfer Fee Total","ACH Transfer Timing","International Wire Cost",
+    "Foreign Exchange Rate","Currency Hedge Cost","Exchange Rate Impact",
+    "Purchasing Power (Inflation)","Inflation Rate (CPI)","Real vs Nominal Return",
+    "Rule of 72 Doubling","Future Value (FV)","Present Value (PV)",
+    "Present Value of Annuity","Future Value of Annuity","Perpetuity Value",
+    "Growing Perpetuity","Net Present Value (NPV)","Internal Rate of Return (IRR)",
+    "Modified IRR (MIRR)","Payback Period","Discounted Payback Period",
+    "Profitability Index","Break-Even Interest Rate","Savings Match Rate","CD Ladder Return"
+  ],
+  "Loans & Debt": [
+    "Monthly Loan Payment","Mortgage Payment","Auto Loan Payment",
+    "Personal Loan Cost","Student Loan Payment","Business Loan Payment",
+    "HELOC Monthly Draw","Home Equity Loan Payment","FHA Loan Payment",
+    "VA Loan Payment","USDA Loan Payment","Jumbo Loan Payment",
+    "Hard Money Loan Cost","Bridge Loan Cost","Construction Draw Schedule",
+    "Balloon Payment Amount","Amortization Schedule","Extra Principal Payment Savings",
+    "Early Payoff Date","Total Debt Payoff","Debt Snowball Order",
+    "Debt Avalanche Interest Saved","Debt Consolidation Savings","Credit Card Payoff Time",
+    "Minimum Payment Trap","APR Comparison","Loan Comparison (True Cost)",
+    "Refinance Break-Even","Mortgage Points ROI","PMI Monthly Cost",
+    "Loan-to-Value Ratio","Debt-to-Income Ratio","Down Payment %",
+    "Closing Cost Estimate","Total Interest Paid","Credit Utilization %",
+    "Credit Score Impact Estimate","Student Loan Forgiveness Value","Forbearance Interest","Income-Driven Repayment"
+  ],
+  "Investment": [
+    "Stock Total Return","Dividend Income","Dividend Yield %",
+    "Price-to-Earnings (P/E)","Price-to-Book (P/B)","Price-to-Sales (P/S)",
+    "Earnings Per Share (EPS)","Market Capitalization","Enterprise Value",
+    "EBITDA Margin","Return on Equity (ROE)","Return on Investment (ROI)",
+    "Return on Invested Capital","CAGR","Dollar-Cost Averaging Return",
+    "Stock Split Adjustment","Share Buyback Yield","Options Intrinsic Value",
+    "Black-Scholes Option Price","Option Delta","Gamma Risk",
+    "Theta Decay","Vega Sensitivity","Implied Volatility",
+    "Bond Price from YTM","Bond Current Yield","Yield to Maturity (YTM)",
+    "Macaulay Duration","Modified Duration","Convexity Adjustment",
+    "Yield Spread (Basis Points)","Bond Equivalent Yield","Mutual Fund Return",
+    "ETF Expense Ratio Impact","Index Fund Tracking Error","Portfolio Alpha",
+    "Portfolio Beta","Sharpe Ratio","Sortino Ratio",
+    "Treynor Ratio","Information Ratio","Maximum Drawdown",
+    "Value at Risk (VaR)","Monte Carlo Portfolio","Correlation Matrix","Rebalancing Cost"
+   ],
+  "Tax": [
+    "Federal Income Tax (US)","State Income Tax","Effective Tax Rate",
+    "Marginal Tax Bracket","Capital Gains Tax","Long-Term Capital Gains",
+    "Short-Term Capital Gains","Qualified Dividend Tax","Self-Employment Tax (SE)",
+    "FICA Payroll Tax","Social Security Tax Limit","Medicare Surtax",
+    "Sales Tax Amount","Property Tax Estimate","Estate Tax Threshold",
+    "Annual Gift Tax Exclusion","Alternative Minimum Tax (AMT)","Tax Withholding W-4",
+    "Quarterly Estimated Tax","Tax Refund Estimate","IRS Underpayment Penalty",
+    "Tax Filing Extension Fee","Back Taxes Interest","Traditional IRA Deduction",
+    "401(k) Tax Savings","HSA Contribution Benefit","FSA Annual Savings",
+    "Child Tax Credit Amount","Child & Dependent Care Credit","American Opportunity Credit",
+    "Home Office Deduction","Vehicle Business Deduction","Charitable Deduction Value",
+    "Business Meal Deduction","Section 179 Expensing","Bonus Depreciation","SALT Deduction Cap","QBI Deduction","Foreign Tax Credit"
+  ],
+  "Retirement": [
+    "401(k) Future Value","Traditional IRA Growth","Roth IRA Tax-Free Growth",
+    "Social Security Benefit Estimate","Pension Monthly Benefit","Fixed Annuity Payment",
+    "Variable Annuity Return","Retirement Income Need","Required Minimum Distribution (RMD)",
+    "Retirement Savings Gap","Years to Retirement","Early Retirement (FIRE)",
+    "Safe Withdrawal Rate (4%)","Portfolio Longevity","Sequence-of-Returns Risk",
+    "Inflation Effect on Retirement","Healthcare Cost in Retirement","Medicare Part B Premium",
+    "Long-Term Care Insurance Need","Survivor Benefit Option","Spousal Social Security",
+    "Social Security Break-Even Age","Pension vs Lump Sum","Annuity vs Drawdown",
+    "Roth Conversion Benefit","Backdoor Roth Eligibility","Catch-Up Contribution Value",
+    "Net Worth Tracker","Wealth Accumulation Rate","COLA Adjustment Impact"
+  ],
+  "Business & Entrepreneurship": [
+    "Break-Even Units","Break-Even Revenue","Gross Profit Margin",
+    "Net Profit Margin","Operating Margin","EBITDA",
+    "Revenue Run Rate","Cost of Goods Sold","Markup %",
+    "Markdown %","Optimal Price (Pricing Strategy)","Customer Lifetime Value (CLV)",
+    "Customer Acquisition Cost (CAC)","LTV:CAC Ratio","Churn Rate",
+    "Monthly Recurring Revenue (MRR)","Annual Recurring Revenue (ARR)","Expansion MRR",
+    "Burn Rate","Runway (Months)","Post-Money Valuation",
+    "Discounted Cash Flow (DCF)","Terminal Value","Exit Multiple",
+    "VC Return (MOIC)","Equity Dilution %","Cap Table Ownership",
+    "Option Pool Impact","ESOP Value","Founder Equity After Dilution",
+    "Revenue Growth Rate","Total Addressable Market","Market Penetration %",
+    "Sales Velocity","Pipeline Coverage Ratio","Commission Payout",
+    "Payroll Tax Total","Fully Loaded Employee Cost","Benefits as % of Salary","HR Cost per Hire"
+  ],
+  "Real Estate": [
+    "Cap Rate","Cash-on-Cash Return","Gross Rent Multiplier (GRM)",
+    "Net Operating Income (NOI)","Monthly Cash Flow (Rental)","Gross Rental Yield",
+    "Net Rental Yield","Property Management Fee","Vacancy Cost",
+    "Operating Expense Ratio","Debt Service Coverage (DSCR)","Loan-to-Value (LTV)",
+    "After Repair Value (ARV)","70% Rule (Fix & Flip)","Rehab Budget",
+    "House Flip Profit","Wholesale Assignment Fee","BRRRR Refinance",
+    "Real Estate ROI","1031 Exchange Boot","Depreciation (Straight-Line)",
+    "Passive Loss Deduction","Airbnb Revenue Estimate","Vacation Rental Occupancy",
+    "Commercial Cap Rate","Office Lease Cost PSF","Retail Triple Net Lease",
+    "Industrial Lease Cost","Land Residual Value","Development Proforma",
+    "Hard Cost per SF","Entitlement Timeline Cost","Floor Area Ratio (FAR)",
+    "Density Units per Acre","Title Insurance Premium","Escrow Reserve",
+    "County Recording Fee","Real Estate Transfer Tax","HOA Reserve Fund","Seller Net Proceeds"
+  ],
+  "Insurance & Currency": [
+    "Life Insurance Need","Term Life Premium Estimate","Whole Life Cash Value",
+    "Universal Life Projection","Disability Insurance Benefit","Critical Illness Payout",
+    "Umbrella Liability Premium","Renters Insurance Cost","Health Insurance Subsidy (ACA)",
+    "Dental Insurance Annual Max","Pet Insurance Premium","Travel Insurance Cost",
+    "Flood Insurance NFIP Premium","Earthquake Insurance Rate","Auto Insurance Estimate",
+    "Homeowners Insurance Estimate","Business Interruption Insurance","Key Person Insurance",
+    "Currency Spot Rate","Forward Exchange Rate","Currency Cross Rate",
+    "Purchasing Power Parity (PPP)","Real Effective Exchange Rate","Carry Trade Return",
+    "Spot to Forward Points","Pip Value (Forex)","Leverage Risk (Forex)",
+    "Cryptocurrency Gain/Loss","DCA Crypto Return","Crypto Tax Lot Basis"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// FOOD  [200]
+// ─────────────────────────────────────────────────────────────────
+"Food": {
+  "Nutrition": [
+    "Calorie Counter","Macronutrient Ratio (Protein/Carb/Fat)","Daily Calorie Need (TDEE)",
+    "Calorie Deficit for Weight Loss","Protein Intake (g/kg body weight)","Carbohydrate Grams",
+    "Fat Grams per Day","Fiber Daily Requirement","Sugar Intake Limit",
+    "Sodium Daily Limit","Potassium Need","Calcium Requirement",
+    "Vitamin D Dosage","Iron Need (by gender)","Zinc Requirement",
+    "Magnesium Need","Vitamin C Intake","B12 Absorption Estimate",
+    "Omega-3 Ratio (EPA/DHA)","Glycemic Index Load","Insulin Index Estimate",
+    "Net Carbs (Total Carbs − Fiber)","Alcohol Calories","Empty Calorie %",
+    "Nutrient Density Score","Antioxidant ORAC Score","Phytonutrient Dose",
+    "Bioavailability Adjustment","Food Synergy Score","Personalized Micro-nutrient Gap",
+    "Supplement Stack Safety","Prebiotic Fiber Dose","Probiotic CFU Dose",
+    "Electrolyte Balance","Hydration From Food"
+  ],
+  "Cooking & Baking": [
+    "Recipe Scaling","Ingredient Substitution Ratio","Baking Powder to Baking Soda",
+    "Yeast Conversion (Fresh to Dry)","Egg Substitute","Butter to Oil Ratio",
+    "Sugar to Honey Conversion","Flour Type Substitution","Altitude Baking Adjustment",
+    "Oven Temperature (Celsius/Fahrenheit)","Cooking Time Scaling","Roast Doneness Timer",
+    "Meat Internal Temperature Guide","Bread Hydration (Baker's %)","Dough Hydration",
+    "Sourdough Starter Ratio","Pizza Dough Weight","Pasta Water Ratio",
+    "Rice Water Ratio","Bread Loaf Weight","Cookie Batch Yield",
+    "Cake Tin Size Conversion","Pie Filling Volume","Custard Egg Ratio",
+    "Ganache Ratio (Cream to Chocolate)","Buttercream Sugar Ratio","Brine Concentration",
+    "Pickling Acidity","Smoking Temperature & Time","Sous Vide Temperature",
+    "Deep Fry Oil Temperature","Caramelization Temperature","Candy Stage Temperature",
+    "Jam Setting Point","Gelatin Bloom Strength","Emulsification Ratio"
+  ],
+  "Diet & Weight Loss": [
+    "BMI","Ideal Body Weight","Body Fat % (Navy Method)",
+    "Lean Body Mass","TDEE (Total Daily Energy Expenditure)","Weight Loss Rate (lbs/week)",
+    "Calorie Deficit Needed","Macro Split (Keto)","Macro Split (Paleo)",
+    "Macro Split (Mediterranean)","Intermittent Fasting Window","Carb Cycling Calculator",
+    "Glycemic Load Diet","Vegan Protein Complete","Vegetarian Iron Adjustment",
+    "Low-FODMAP Serving","DASH Diet Sodium Limit","Anti-Inflammatory Score",
+    "Calorie Cycling Zigzag","Diet Break Calorie Refeed","Weight Plateau Prediction",
+    "Fat Loss Rate (Safe)","Muscle Gain Calorie Surplus","Body Recomposition Target",
+    "Cheat Meal Impact","Diet Adherence Score"
+  ],
+  "Beverages": [
+    "Coffee to Water Ratio","Espresso Extraction Yield","Cold Brew Concentrate Ratio",
+    "Tea Steep Time & Temperature","Alcohol Unit Count","Blood Alcohol Content (BAC)",
+    "Cocktail Dilution %","Beer ABV from OG/FG","Wine Glass Servings",
+    "Spirits Standard Drink","Smoothie Calorie Count","Juice Nutrient Concentration",
+    "Protein Shake Macro","Sports Drink Electrolyte","Energy Drink Caffeine mg",
+    "Daily Caffeine Safety Limit"
+  ],
+  "Restaurant & Food Service": [
+    "Food Cost %","Menu Item Contribution Margin","Recipe Food Cost",
+    "Plate Cost","Batch Recipe Scaling","Yield % (Trim Loss)",
+    "As-Purchased vs Edible Portion","Buffet Food Quantity per Guest","Catering Servings",
+    "Event Food Budget","Beverage Cost %","Bar Pour Cost",
+    "Waste Reduction Savings","Labor Cost %","Prime Cost %",
+    "Break-Even Covers","Average Check Size","Table Turn Rate",
+    "Revenue per Available Seat","Food Safety Temperature Zone","FIFO Rotation Days"
+  ],
+  "Food Safety": [
+    "Refrigerator Storage Days","Freezer Safe Duration","Thawing Time (Refrigerator)",
+    "Thawing Time (Cold Water)","Safe Internal Temperature","Danger Zone Time",
+    "Pathogen Kill Temperature","Pasteurization Time-Temperature","pH for Food Safety",
+    "Water Activity Preservation","Salt % for Fermentation","Vinegar Acidity for Canning",
+    "Sugar % for Preservation","Sanitizer Concentration","Hand Washing Efficacy","Allergen Cross-Contact Risk"
+  ],
+  "Agriculture & Farming": [
+    "Crop Yield per Acre","Seed Germination Rate","Plant Spacing per Row",
+    "Irrigation Volume per Crop","Fertilizer N-P-K Application","Soil pH Lime Amendment",
+    "Organic Matter Addition","Compost Tea Dilution","Harvest Weight per Plant",
+    "Greenhouse Square Footage Yield","Hydroponics Nutrient Solution","Aquaponics Fish-to-Plant Ratio",
+    "Poultry Feed Conversion","Livestock Feed Requirement","Dairy Milk Yield",
+    "Beehive Honey Yield","Cover Crop Biomass","Rotation Crop Nitrogen Credit",
+    "Farm Profit per Acre","CSA Share Price"
+  ],
+  "Food Science": [
+    "Water Activity (aw) Calculator","pH Stability of Food","Maillard Reaction Temperature",
+    "Starch Gelatinization Temp","Protein Denaturation Temp","Emulsion Stability HLB",
+    "Viscosity of Sauce","Osmotic Pressure (Food)","Freezing Point Depression (Ice Cream)",
+    "Ice Crystal Formation Rate","Shelf Life Acceleration (Q10)","Arrhenius Shelf Life",
+    "Moisture Content %","Moisture Sorption Isotherm","Color Change (ΔE)",
+    "Texture Profile Analysis","Sensory Score Aggregation","Portion Control Accuracy",
+    "Calorie Labeling Tolerance","Nutritional Label Rounding","Package Net Weight",
+    "Serving Size Equivalence","Additives Legal Limit","Food Additive ADI",
+    "Natural vs Artificial Color Dose"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// HEALTH  [420]
+// ─────────────────────────────────────────────────────────────────
+"Health": {
+  "Fitness & Exercise": [
+    "BMI (Body Mass Index)","TDEE (Calories Burned per Day)","VO2 Max Estimate",
+    "Heart Rate Zones (Karvonen)","Maximum Heart Rate (220−Age)","Resting Heart Rate Trend",
+    "Target Heart Rate","Aerobic vs Anaerobic Threshold","Lactate Threshold Pace",
+    "Running VO2 (Jack Daniels)","1-Rep Max (Epley Formula)","1-Rep Max (Brzycki)",
+    "Strength Training Volume (Sets×Reps×Weight)","Progressive Overload Increment",
+    "Training Load (Acute/Chronic Ratio)","Recovery Time (HRV)","Deload Week Frequency",
+    "Rest Interval Calculator","Calorie Burn (Walking)","Calorie Burn (Running)",
+    "Calorie Burn (Cycling)","Calorie Burn (Swimming)","Calorie Burn (Rowing)",
+    "Calorie Burn (HIIT)","Calorie Burn (Weight Training)","Calorie Burn (Yoga)",
+    "METs to Calories","Step Count to Miles","Steps to Calories",
+    "Exercise-Induced Weight Loss Rate","Afterburn Effect (EPOC)","Anaerobic Threshold Speed",
+    "Critical Power (CP)","FTP (Functional Threshold Power)","Cycling Power Zones",
+    "Swim Pace per 100m","Swim Efficiency (SWOLF)","Flexibility Score",
+    "Balance & Stability Score","Injury Risk Load Ratio","Return to Sport Timeline",
+    "Training Stress Score (TSS)","Chronic Training Load (CTL)","Acute Training Load (ATL)",
+    "Training Stress Balance (TSB)","Performance Management Chart","Muscle Group Volume",
+    "Protein Synthesis Window","Glycogen Depletion Time","Hydration Sweat Rate",
+    "Electrolyte Loss Rate","Sport-Specific Power","Vertical Jump Height",
+    "Broad Jump Distance","Sprint Acceleration","Agility T-Test Score",
+    "Reactive Strength Index","Countermovement Jump Power","Isometric Force Output",
+    "Push-Up Max Estimate","Pull-Up Max Estimate","Core Endurance Duration"
+  ],
+  "Body Measurements": [
+    "Body Fat % (Skinfold 3-Site)","Body Fat % (Skinfold 7-Site)","Body Fat % (DEXA Estimate)",
+    "Lean Body Mass","Skeletal Muscle Mass","Visceral Fat Level",
+    "Waist-to-Hip Ratio","Waist-to-Height Ratio","Body Roundness Index",
+    "A Body Shape Index (ABSI)","Relative Fat Mass (RFM)","Ponderal Index",
+    "Ideal Weight (Hamwi)","Ideal Weight (Robinson)","Ideal Weight (Miller)",
+    "Ideal Weight (Devine)","Weight Percentile (Adults)","BMI Prime",
+    "Body Surface Area (BSA)","Body Volume Estimate","Water Weight %",
+    "Bone Density T-Score","Muscle-to-Fat Ratio","Arm Muscle Area","Calf Muscle Area",
+    "Mid-Upper Arm Circumference (MUAC)","Neck Circumference Risk","Hip-to-Waist Goal",
+    "Body Composition Change Rate","Fat Cell Volume","Cellulite Index"
+  ],
+  "Pregnancy & Fertility": [
+    "Due Date (Naegele's Rule)","Gestational Age (Weeks)","Fetal Weight Estimate",
+    "Fetal Growth Percentile","Fundal Height","Crown-Rump Length",
+    "Nuchal Translucency Risk","Down Syndrome Risk (Combined)","Amniocentesis Risk",
+    "GBS Screening Date","Kick Count Assessment","Preterm Birth Risk",
+    "Pregnancy Weight Gain","Pregnancy BMI","Calorie Need in Pregnancy",
+    "Iron Need in Pregnancy","Folate Dose","DHA Need in Pregnancy",
+    "Postpartum Weight Loss","Breastfeeding Calorie Extra","Milk Production Estimate",
+    "Ovulation Day (LMP)","Fertile Window","Basal Body Temperature Shift",
+    "Progesterone Level Check","FSH Level Interpretation","AMH Ovarian Reserve",
+    "Sperm Analysis Score","IUI Success Rate","IVF Success Rate Estimate",
+    "PCOS Symptom Score","Endometriosis Pain Scale","Fertility Diet Score",
+    "Preconception Folic Acid","Age-Related Fertility Decline","Twin Probability",
+    "Miscarriage Risk by Age","Beta-hCG Doubling Rate","Progesterone Support Dose",
+    "NICU Gestational Prognosis","APGAR Score"
+  ],
+  "Medical Conditions": [
+    "Blood Pressure Category","Mean Arterial Pressure (MAP)","Pulse Pressure",
+    "Blood Glucose (mmol to mg/dL)","HbA1c to Average Glucose","Diabetes Risk Score (FINDRISC)",
+    "eGFR Chronic Kidney Stage","Creatinine Clearance (Cockcroft-Gault)","Urine Albumin Ratio",
+    "Total Cholesterol Risk","LDL Friedewald Equation","Non-HDL Cholesterol",
+    "Cardiovascular Risk (Framingham)","10-Year ASCVD Risk (ACC/AHA)","Statin Benefit Score",
+    "Stroke Risk (CHA₂DS₂-VASc)","Bleeding Risk (HAS-BLED)","Atrial Fibrillation Score",
+    "Chest Pain TIMI Risk","HEART Score","GRACE Score",
+    "Sepsis qSOFA","APACHE II ICU Score","Glasgow Coma Scale",
+    "NIHSS Stroke Severity","Modified Rankin Scale","Pulmonary Embolism Wells Score",
+    "DVT Wells Score","PERC Rule","Alvarado Appendicitis Score",
+    "Child-Pugh Liver Score","MELD Score","AUDIT Alcohol Score",
+    "PHQ-9 Depression Score","GAD-7 Anxiety Score","Epworth Sleepiness Scale",
+    "STOP-BANG Sleep Apnea","Asthma Control Test","COPD GOLD Stage",
+    "Crohn's Disease Activity","Rheumatoid Arthritis DAS28","Gout Attack Risk",
+    "Thyroid TSH Interpretation","Vitamin D Deficiency Dose","Antibiotic Dose (Weight-Based)",
+    "Drug Dose Adjustment (Renal)","Opioid Conversion (MME)","Warfarin INR Target"
+  ],
+  "Nutrition & Diet (Health)": [
+    "Calorie Intake Target","Macro Split for Goal","Protein for Muscle",
+    "Protein for Weight Loss","Carb Cycling Plan","Ketogenic Macro Ratio",
+    "Intermittent Fasting Calorie Window","Metabolic Rate Decline with Age","Diet Quality Index",
+    "Healthy Eating Score","MIND Diet Score","DASH Sodium Target",
+    "Mediterranean Diet Adherence","Plant-Based Protein Completeness","Calcium to Vitamin D Ratio",
+    "Iron + Vitamin C Absorption","Zinc to Copper Ratio","B Vitamin Complex Dose",
+    "Antioxidant Food Score","Anti-Inflammatory Food Score","Prebiotic Daily Dose",
+    "Probiotic Strain Dose","Fiber to Gut Health Score","Sodium to Potassium Ratio",
+    "Omega-6 to Omega-3 Ratio","Saturated Fat Limit","Trans Fat Limit",
+    "Added Sugar Limit","Alcohol to Calorie Impact","Supplement Safety Upper Limit",
+    "Nutrient Timing Pre-Workout","Nutrient Timing Post-Workout","Creatine Loading Dose",
+    "Caffeine Performance Dose","Beta-Alanine Dose","HMB Dose","Collagen Dose","Protein Powder Scoop Amount"
+  ],
+  "Mental Health": [
+    "Stress Level Score (PSS)","Burnout Risk Assessment","Work-Life Balance Score",
+    "Sleep Quality Score (PSQI)","Mindfulness Minutes Needed","Meditation Consistency %",
+    "Cognitive Load Index","Focus Time Remaining","Brain Training Progress",
+    "Emotional Resilience Score","Social Isolation Risk","Loneliness Scale",
+    "Gratitude Practice Score","CBT Thought Record Score","Exposure Therapy Progress",
+    "Anxiety Trigger Frequency","Panic Attack Recovery Time","PTSD Checklist Score (PCL-5)",
+    "Addiction Craving Intensity","Sobriety Milestone Days","Mood Tracking Average",
+    "Energy Level Variance","Emotional Regulation Score","Therapy Session Frequency Need",
+    "Mental Health Day Frequency","Compassion Fatigue Score","Digital Detox Need","Self-Care Deficit Score","Positive Psychology Score","Life Satisfaction Index"
+  ],
+  "Sleep & Recovery": [
+    "Sleep Duration Need (by age)","Sleep Debt Calculator","Optimal Bedtime (Wake Time)",
+    "Optimal Wake Time (Bedtime)","Sleep Cycle Timing (90 min)","REM Sleep % Target",
+    "Deep Sleep % Target","Sleep Quality Score","Insomnia Severity Index",
+    "Snoring Severity Score","Circadian Rhythm Phase","Melatonin Dose Timing",
+    "Caffeine Half-Life Cutoff","Alcohol Effect on Sleep","Post-Workout Recovery Hours",
+    "Muscle Soreness Duration (DOMS)","Ice Bath Temperature Duration","Compression Garment Benefit",
+    "Nap Optimal Duration","Power Nap Timing","Jet Lag Recovery Days","Shift Work Sleep Debt","HRV Recovery Threshold"
+  ],
+  "Vision & Hearing": [
+    "Eyeglass Prescription (Sphere/Cylinder/Axis)","Contact Lens Power","Reading Distance",
+    "Visual Acuity 20/20 Conversion","Color Vision Deficiency Test","Intraocular Pressure (IOP) Risk",
+    "Macular Degeneration Risk","Retinal Detachment Risk","Screen Distance for Eyes",
+    "Blue Light Exposure Hours","20-20-20 Rule Reminder","Presbyopia Reading Add",
+    "Hearing Loss dB Level","Speech Intelligibility Score","Tinnitus Severity",
+    "Noise Exposure Dose (NIOSH)","Hearing Aid Amplification","Cochlear Implant Candidacy",
+    "Ear Canal Resonance","Audiogram PTA Average","Hearing Handicap Score"
+  ],
+  "Dental Health": [
+    "Caries Risk Score","Gum Disease Risk","Fluoride Dose (by Age)",
+    "Orthodontic Arch Width","Crown vs Filling Cost","Tooth Whitening Sessions",
+    "Remineralization Rate","pH Erosion Risk","Brushing Time Needed",
+    "Flossing Frequency Impact","Mouthwash Timing","Dental X-Ray Frequency",
+    "Implant Bone Loss Risk","Root Canal Success Rate","TMJ Pain Score","Dry Mouth Saliva Rate"
+  ],
+  "Skin Care": [
+    "SPF Protection Time","UV Index Skin Damage","Sunscreen Reapplication Interval",
+    "Skin Type Hydration Need","Retinol Dose (Strength)","Vitamin C Serum %",
+    "Hyaluronic Acid Molecule Size","Acne Severity Score","Sebum Production Rate",
+    "Skin Barrier TEWL","Collagen Synthesis Rate","Anti-Aging Ingredient Stack",
+    "Dermal Filler Duration","Botox Unit Estimate","Laser Treatment Sessions","Chemical Peel Depth"
+  ],
+  "Elderly Care": [
+    "Frailty Index Score","Fall Risk Score (Morse)","Barthel ADL Score",
+    "Cognitive Decline Rate (MoCA)","Polypharmacy Risk","Beers Criteria Drug Score",
+    "Protein Need (Sarcopenia)","Bone Loss Rate (Osteoporosis)","Hip Fracture Risk (FRAX)",
+    "Calcium + D3 for Seniors","Dehydration Risk in Elderly","Caregiver Burnout Score",
+    "Home Safety Modification Cost","Nursing Home Cost per Day","Assisted Living Cost","Geriatric Depression Scale"
+  ],
+  "Pediatrics": [
+    "Child BMI Percentile","Weight-for-Age Z-score","Height-for-Age Z-score",
+    "Head Circumference Percentile","Infant Calorie Need","Breastmilk Production Estimate",
+    "Formula Feed Volume","Solid Food Introduction Age","Child Calorie by Age",
+    "Child Protein Need","Vaccine Schedule Age","Growth Velocity",
+    "Pediatric Medication Dose (Weight)","Fever Antipyretic Dose","PEWS Score",
+    "APGAR Score Guide","Newborn Jaundice (Bilirubin)","Hearing Screening Age",
+    "Vision Screening Age","Developmental Milestone Age","Screen Time Limit",
+    "Sleep Duration by Age","Child BMR","Tanner Stage Estimate","Childhood Obesity Risk",
+    "ADHD Rating Scale","Autism Spectrum Q-CHAT","Reading Readiness Age","Handwriting Milestone","Growth Plate Status"
+  ],
+  "Men's Health": [
+    "Testosterone Level by Age","PSA Score Interpretation","Prostate Volume (TRUS)",
+    "BPH Symptom Score (IPSS)","Erectile Dysfunction Risk","Fertility Sperm Count",
+    "Sperm Motility Score","Male Pattern Baldness Rate","DHT Conversion Estimate",
+    "Muscle-Building Testosterone Threshold","SHBG-Bound Testosterone","Free Testosterone %",
+    "Male BMR","Testosterone-to-Estradiol Ratio","Anabolic Index","TRT Dose Estimate",
+    "Gynecomastia Risk","Cardiovascular Risk (Male)","Abdominal Obesity Risk","Male Fertility Age Decline"
+  ],
+  "Women's Health": [
+    "Menstrual Cycle Length","Period Irregularity Score","Ovulation Prediction",
+    "PMS Symptom Severity","Endometriosis Pain Rating","PCOS Hormonal Score",
+    "Estrogen Dominance Risk","Progesterone Deficiency","Perimenopause Symptom Score",
+    "Menopause Onset Age Estimate","HRT Dose Estimate","Bone Density Risk (Women)",
+    "Breast Cancer Risk (Gail Model)","Cervical Cancer Screening Interval",
+    "Pap Smear Frequency","HPV Vaccine Age Window","Iron Deficiency Risk (Women)",
+    "Pregnancy Complication Risk","Postpartum Depression Risk","Lactation Calorie Need",
+    "Female Athlete Triad Risk","Low Estrogen BMD Loss","Libido Hormone Balance",
+    "Vaginal pH Balance","Hormone Cycle Tracking","UTI Risk Score","Bladder Capacity","Pelvic Floor Score","Kegel Frequency","Female Fertility Age Decline"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// MATH  [500]
+// ─────────────────────────────────────────────────────────────────
+"Math": {
+  "Algebra": [
+    "Quadratic Formula","Linear Equation (One Variable)","System of Two Linear Equations",
+    "System of Three Linear Equations","Polynomial Roots (Cubic)","Polynomial Roots (Quartic)",
+    "Remainder Theorem","Factor Theorem","Synthetic Division",
+    "Rational Root Theorem","Discriminant","Vertex of Parabola",
+    "Axis of Symmetry","Completing the Square","Sum & Product of Roots",
+    "Binomial Expansion (Pascal)","Vieta's Formulas","Partial Fractions",
+    "Logarithm Laws","Change of Base Formula","Natural Log (ln)",
+    "Exponential Growth","Exponential Decay","Compound Interest (Algebra)",
+    "Direct Variation","Inverse Variation","Joint Variation",
+    "Absolute Value Equation","Inequality Solution Set","Rational Inequality",
+    "Radical Equation","Complex Numbers (Operations)","Modulus of Complex Number",
+    "Argument (Angle) of Complex Number","De Moivre's Theorem","Roots of Unity",
+    "Matrix Addition","Matrix Multiplication","Determinant (2×2)",
+    "Determinant (3×3)","Matrix Inverse (2×2)","Matrix Inverse (3×3)",
+    "Cramer's Rule (2 var)","Cramer's Rule (3 var)","Row Reduction (Gaussian)",
+    "Eigenvalue (2×2)","Eigenvector (2×2)","Characteristic Polynomial",
+    "Null Space","Column Space Rank","Gauss-Jordan Elimination",
+    "Substitution Method","Elimination Method","Graphical Intersection",
+    "Function Composition","Function Inverse","Domain & Range",
+    "Even / Odd Function Check","Piecewise Function Evaluation","Floor & Ceiling Function",
+    "Modular Arithmetic"
+  ],
+  "Geometry": [
+    "Area of Circle","Area of Rectangle","Area of Triangle",
+    "Area of Parallelogram","Area of Trapezoid","Area of Ellipse",
+    "Area of Regular Polygon","Area of Sector","Area of Annulus",
+    "Perimeter of Rectangle","Perimeter of Triangle","Circumference of Circle",
+    "Arc Length","Chord Length","Sagitta of Arc",
+    "Volume of Cube","Volume of Rectangular Prism","Volume of Cylinder",
+    "Volume of Cone","Volume of Sphere","Volume of Pyramid",
+    "Volume of Ellipsoid","Volume of Torus","Volume of Frustum",
+    "Volume of Tetrahedron","Volume of Octahedron","Volume of Dodecahedron",
+    "Surface Area of Sphere","Surface Area of Cylinder","Surface Area of Cone",
+    "Surface Area of Cube","Surface Area of Rectangular Prism","Lateral Surface Area (Cone)",
+    "Pythagorean Theorem","Pythagorean Triple Generator","Distance Between Two Points",
+    "Midpoint","Slope of Line","Equation of Line (Slope-Intercept)",
+    "Equation of Line (Point-Slope)","Parallel Line Equation","Perpendicular Line Equation",
+    "Angle Bisector","Interior Angles Sum (Polygon)","Exterior Angle Theorem",
+    "Similar Triangle Ratio","Congruence Check (SSS/SAS/ASA)","Heron's Formula",
+    "Law of Cosines","Law of Sines","Circumradius of Triangle",
+    "Inradius of Triangle","Centroid Coordinates","Orthocenter Coordinates",
+    "Incenter Coordinates","Euler Line","Nine-Point Circle Radius",
+    "Median Length","Altitude Length","Angle in Semicircle"
+  ],
+  "Calculus": [
+    "Limit (Numerical)","Limit at Infinity","L'Hôpital's Rule",
+    "Derivative (Power Rule)","Derivative (Product Rule)","Derivative (Quotient Rule)",
+    "Derivative (Chain Rule)","Implicit Differentiation","Higher-Order Derivative",
+    "Tangent Line Equation","Normal Line Equation","Critical Points",
+    "Inflection Points","Concavity Test (2nd Derivative)","Relative Max/Min",
+    "Absolute Max/Min (Closed Interval)","Mean Value Theorem Check","Rolle's Theorem Check",
+    "Definite Integral (Numeric)","Antiderivative (Power Rule)","Integration by Substitution",
+    "Integration by Parts","Partial Fractions Integration","Trigonometric Integral",
+    "Improper Integral Convergence","Area Between Curves","Volume by Disk Method",
+    "Volume by Washer Method","Volume by Shell Method","Arc Length (Calculus)",
+    "Surface Area of Revolution","Average Value of Function","Riemann Sum (Left/Right/Mid)",
+    "Trapezoidal Rule","Simpson's Rule","Fundamental Theorem of Calculus",
+    "Taylor Series Approximation","Maclaurin Series","Lagrange Error Bound",
+    "Differential Equation (Separable)","Euler's Method","Slope Field",
+    "Exponential Growth ODE","Logistic Growth ODE","Linear ODE (Integrating Factor)",
+    "Partial Derivative","Gradient Vector","Directional Derivative",
+    "Double Integral (Cartesian)","Double Integral (Polar)"
+  ],
+  "Trigonometry": [
+    "Sine (sin)","Cosine (cos)","Tangent (tan)",
+    "Cosecant (csc)","Secant (sec)","Cotangent (cot)",
+    "Arcsin (sin⁻¹)","Arccos (cos⁻¹)","Arctan (atan2)",
+    "Degrees to Radians","Radians to Degrees","Reference Angle",
+    "Unit Circle Coordinates","Pythagorean Identity","Sum-to-Product Formula",
+    "Product-to-Sum Formula","Double Angle Formula","Half Angle Formula",
+    "Sum Formula (sin/cos/tan)","Difference Formula","Law of Sines Application",
+    "Law of Cosines Application","Bearing & Navigation","Angle of Elevation",
+    "Angle of Depression","Projectile Angle","Trig Equation Solution",
+    "Trig Inequality","Graphing Amplitude & Period","Phase Shift",
+    "Vertical Shift","Harmonic Motion","Fourier Series Coefficient",
+    "Lissajous Figure","Polar Equation","Polar to Cartesian",
+    "Cartesian to Polar","Complex Exponential (Euler)","Hyperbolic Sine (sinh)",
+    "Hyperbolic Cosine (cosh)","Inverse Hyperbolic (arcsinh)"
+  ],
+  "Number Theory": [
+    "GCD (Euclidean Algorithm)","LCM","Prime Factorization",
+    "Primality Test","Sieve of Eratosthenes Count","Prime Gaps",
+    "Euler's Totient φ(n)","Divisor Count σ₀(n)","Divisor Sum σ₁(n)",
+    "Perfect Number Check","Abundant Number Check","Deficient Number Check",
+    "Amicable Pair Check","Mersenne Prime Check","Fermat's Little Theorem",
+    "Chinese Remainder Theorem","Modular Inverse","Modular Exponentiation",
+    "Discrete Logarithm (small)","Quadratic Residue","Legendre Symbol",
+    "Jacobi Symbol","Euler's Criterion","Continued Fraction Expansion",
+    "Convergents of Continued Fraction","Pell Equation Solution","Fibonacci n-th Term",
+    "Lucas Numbers","Catalan Numbers","Bell Numbers",
+    "Stirling Numbers","Partition Function p(n)","Goldbach Partition Count",
+    "Twin Prime Check","Cousin Prime Check","Sophie Germain Prime","Digital Root","Narcissistic Number Check","Palindromic Number Check","Happy Number Check","Collatz Steps"
+  ],
+  "Linear Algebra": [
+    "Dot Product","Cross Product","Vector Magnitude",
+    "Unit Vector","Vector Projection","Scalar Triple Product",
+    "Vector Triple Product","Angle Between Vectors","Vector Addition",
+    "Vector Subtraction","Linear Combination","Linear Independence Check",
+    "Span Dimension","Basis Check","Orthogonality Check",
+    "Gram-Schmidt Process","QR Decomposition Step","LU Decomposition",
+    "Cholesky Decomposition","SVD Singular Values","Rank of Matrix",
+    "Nullity","Trace of Matrix","Frobenius Norm",
+    "Matrix Power","Cayley-Hamilton Theorem","Diagonalization Check",
+    "Jordan Normal Form","Quadratic Form","Positive Definite Check",
+    "Least Squares Solution","Pseudoinverse","Condition Number",
+    "Eigenvalue (3×3)","Spectral Radius","Principal Component Count",
+    "Variance Explained (PCA)","Covariance Matrix","Correlation Matrix","Markov Chain Steady State"
+  ],
+  "Discrete Mathematics": [
+    "Permutations (nPr)","Combinations (nCr)","Multinomial Coefficient",
+    "Derangements","Stirling Number (1st Kind)","Stirling Number (2nd Kind)",
+    "Inclusion-Exclusion Principle","Pigeonhole Bound","Binomial Theorem Coefficient",
+    "Pascal's Triangle Row","Catalan Number","Motzkin Number",
+    "Narayana Number","Bell Number","Partition Function",
+    "Graph Vertex Degree","Graph Edge Count","Euler Path Condition",
+    "Hamiltonian Path Existence Hint","Tree Node Count","Binary Tree Height",
+    "AVL Balance Factor","B-Tree Order","Hash Collision Probability",
+    "Birthday Problem Probability","Coupon Collector Steps","Random Walk Steps",
+    "Boolean Expression Simplify (SOP)","Truth Table Row Count","Logic Gate Count",
+    "Finite Automaton State","Regular Expression Complexity","Recurrence Relation Solution",
+    "Master Theorem","Big-O Simplify","Sorting Comparison Count",
+    "Binary Search Steps","Dijkstra Path Length","Floyd-Warshall Matrix Step","Knapsack Capacity"
+  ],
+  "Arithmetic & General": [
+    "Addition","Subtraction","Multiplication",
+    "Division","Integer Division & Remainder","Exponentiation",
+    "Square Root","Cube Root","Nth Root",
+    "Absolute Value","Rounding (Up/Down/Nearest)","Truncation",
+    "Percent of Number","Percentage Change","Percentage Difference",
+    "Ratio Simplification","Proportion Solver","Mean (Arithmetic Average)",
+    "Weighted Mean","Geometric Mean","Harmonic Mean",
+    "Median","Mode","Range",
+    "Order of Operations (PEMDAS)","Prime vs Composite","Integer Factorization",
+    "Divisibility Rules","Number Line Plot"
+  ],
+  "Fractions & Ratios": [
+    "Fraction Addition","Fraction Subtraction","Fraction Multiplication",
+    "Fraction Division","Simplify Fraction","Convert to Mixed Number",
+    "Convert to Improper Fraction","Fraction to Decimal","Decimal to Fraction",
+    "Fraction to Percent","Percent to Fraction","Comparing Fractions",
+    "Equivalent Fractions","Complex Fraction","Unit Fraction Decomposition",
+    "Egyptian Fraction","Ratio to Fraction","Ratio Simplification",
+    "Proportion Cross-Multiply","Rate Problem (d=rt)","Mixture Problem",
+    "Alligation Method","Weighted Ratio","Scale Factor","Map Ratio Distance"
+  ],
+  "Sequences & Series": [
+    "Arithmetic Sequence nth Term","Arithmetic Series Sum","Geometric Sequence nth Term",
+    "Geometric Series Sum","Infinite Geometric Series","Harmonic Series Partial Sum",
+    "Fibonacci Sequence Term","Lucas Sequence Term","Triangular Numbers",
+    "Square Numbers","Cube Numbers","Pentagonal Numbers",
+    "Recurrence Relation (Linear)","Generating Function Coefficient","Partial Sums Table",
+    "Telescoping Series","Alternating Series Bound","Power Series Radius of Convergence",
+    "Maclaurin Coefficients","Taylor Polynomial Degree","Fourier Series Partial Sum",
+    "Difference Equation Solution","Logistic Map Iteration","Continued Fraction Terms",
+    "Padé Approximant","Euler-Maclaurin Correction","Summation by Parts","Bernoulli Numbers","Zeta Function (partial)","Gregory-Leibniz Series"
+  ],
+  "Combinatorics & Probability (Math)": [
+    "Sample Space Size","Event Probability","Complementary Probability",
+    "Union Probability (Inclusion-Exclusion)","Intersection (Independent Events)","Conditional Probability",
+    "Bayes' Theorem","Law of Total Probability","Expected Value",
+    "Variance of Distribution","Standard Deviation","Covariance",
+    "Correlation Coefficient","Chebyshev Bound","Markov Bound",
+    "Hypergeometric Probability","Binomial Probability","Geometric Probability",
+    "Negative Binomial","Poisson Probability","Birthday Problem",
+    "Coupon Collector","Random Permutation Probability","Derangement Probability",
+    "Lottery Odds","Card Draw Probability","Dice Roll Distribution",
+    "Coin Flip Streaks","Random Walk Probability","Gambler's Ruin"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// SPORTS  [250]
+// ─────────────────────────────────────────────────────────────────
+"Sports": {
+  "Running & Track": [
+    "Running Pace (min/mile or min/km)","5K Finish Time Estimate","10K Finish Time",
+    "Half Marathon Finish Time","Marathon Finish Time","Ultramarathon Pace",
+    "Race Pace vs Training Pace","Running Cadence","Stride Length",
+    "Running Economy","VO2 Max from Race Time (Riegel)","Lactate Threshold Pace",
+    "Heart Rate Zone (Running)","Calories Burned Running","Running Power (Watts)",
+    "Critical Velocity","Speed from Pace","Treadmill Grade Adjustment",
+    "Wind Resistance Correction","Altitude Pace Adjustment","Heat Adjustment",
+    "Age-Graded Performance %","Running Age Factor","World Record % Back",
+    "Interval Training Splits","Fartlek Session Design","Tempo Run Pace",
+    "Long Run Pace","Easy Run Pace","Recovery Run Pace",
+    "Race Effort Score","Boston Qualifier Time","Running Shoe Mileage Life",
+    "Foot Strike Analysis","Cadence Improvement","Sprint 100m Time"
+  ],
+  "Swimming": [
+    "Swim Pace (per 100m/yd)","SWOLF Efficiency Score","400m Time Estimate",
+    "1500m Swim Time","Open Water Time Adjustment","Triathlon Swim Leg",
+    "Stroke Rate (strokes/min)","Distance per Stroke","Swim Tempo",
+    "Calories Burned Swimming","Drag Force in Water","Propulsive Efficiency",
+    "Lactate Threshold Swim Pace","CSS (Critical Swim Speed)","T-30 Swim Test",
+    "Swim Power Output","Pull Buoy vs Paddles Time","Altitude Pool Adjustment",
+    "Taper Time for Swim","Race Start Dive Time","Turn & Push-off Time",
+    "Flip Turn Speed","Swim Age-Grade %","Swim Training Volume Load","World Record % (Swim)"
+  ],
+  "Cycling": [
+    "Cycling Power (Watts)","FTP (Functional Threshold Power)","W/kg Power-to-Weight",
+    "Cycling Power Zones","TSS (Training Stress Score)","CTL/ATL/TSB PMC",
+    "Cycling Cadence vs Speed","Gear Ratio","Wheel Size Speed",
+    "Cycling Calorie Burn","Hill Climb Time","VAM (Vertical Ascent Meters/hr)",
+    "Aero CdA Estimate","Wind Resistance Watts","Rolling Resistance Watts",
+    "Cycling Efficiency (GE %)","Bike Fit Reach & Stack","Saddle Height",
+    "Cleat Position","Cycling VO2 Max","Cycling Age-Grade %","Critical Power (CP20)",
+    "Anaerobic Capacity (W')","Sprint Peak Power","Acceleration Force",
+    "Bicycle Weight Savings","Time Trial Pace","Criterium Average Speed"
+  ],
+  "Team Sports": [
+    "Basketball Points Per Possession","Basketball True Shooting % (TS%)","Basketball PER Estimate",
+    "Basketball Win Shares","Box Plus/Minus (BPM)","NBA Player Efficiency",
+    "Soccer xG (Expected Goals)","Soccer Pass Completion %","Soccer Sprint Distance",
+    "American Football Passer Rating (NFL)","Quarterback QBR","Yards per Carry",
+    "Football DVOA Estimate","Baseball Batting Average","On-Base Percentage (OBP)",
+    "Slugging Percentage (SLG)","OPS","wRC+ Estimate",
+    "ERA (Earned Run Average)","WHIP","FIP (Fielding Independent Pitching)",
+    "WAR (Wins Above Replacement) Estimate","Hockey Corsi %","Hockey Fenwick %",
+    "Plus/Minus (Hockey)","Volleyball Hitting Efficiency","Volleyball Passing Grade",
+    "Rugby Tackle Success %","Cricket Batting Average","Cricket Economy Rate",
+    "Lacrosse Clear %","Field Hockey Shot on Goal %","Handball Goal %",
+    "Water Polo Shot Efficiency","Rowing Race Pace","Team Winning %"
+  ],
+  "Combat Sports": [
+    "Boxing Reach Advantage","Punch Force Estimate (kg⋅m/s²)","Punch Speed",
+    "KO Probability Estimate","Striking Accuracy %","Wrestling Takedown %",
+    "Grappling Control Time","MMA Win Probability","Striking Defense %",
+    "Significant Strikes per Minute","Striking Output Power","Jiu-Jitsu Submission %",
+    "Weight Cut Estimate","Dehydration Risk (Weight Cut)","Rehydration Rate",
+    "Fight Camp Fitness Level","Combat Sport VO2","Impact Force (Boxing)",
+    "Head Movement Slip %","Counter Strike Efficiency"
+  ],
+  "Golf": [
+    "Golf Handicap Index (WHS)","Course Handicap","Playing Handicap",
+    "Handicap Differential","Slope Rating","Driving Distance Average",
+    "GIR (Greens in Regulation) %","Putts per Round","Scrambling %",
+    "Sand Save %","Par Score vs Handicap","Net Score vs Par",
+    "Stableford Points","Ryder Cup Points","Stroke Play Scoring",
+    "Ball Speed to Carry Distance","Spin Rate to Apex","Launch Angle Optimal",
+    "Smash Factor","Wind Effect on Distance","Altitude Effect on Distance","Golf Cart Distance"
+  ],
+  "Tennis & Racket Sports": [
+    "Tennis Serve Speed to Reaction Time","First Serve % Target","Break Point Conversion %",
+    "Double Fault %","Winners to Unforced Errors Ratio","Rally Length Average",
+    "Tennis ELO Rating","Tiebreak Win Probability","Tennis Ranking Points",
+    "Badminton Shuttle Speed","Squash Let %","Pickleball Dink %",
+    "Table Tennis Spin Rate","Racket Swing Speed","String Tension Effect"
+  ],
+  "Winter Sports": [
+    "Ski Run Speed","Snowboard Carve Radius","Slalom Time Estimate",
+    "Downhill Race Time","Jump Distance (Ski Jump)","Nordic Ski Pace",
+    "Cross-Country Ski V2 Efficiency","Snowshoe Pace","Ice Skating Speed",
+    "Speed Skating 500m Time","Figure Skating Score Estimate","Hockey Ice Time",
+    "Curling Stone Speed","Snow Density (Water Equivalent)","Avalanche Run-Out Distance",
+    "Backcountry Navigation Distance","Cold Stress Index","Frostbite Risk Time",
+    "Hypothermia Risk Rate","Ski Boot Fit Volume"
+  ],
+  "Extreme & Action Sports": [
+    "Bungee Jump Cord Length","Skydive Terminal Velocity","Freefall Time",
+    "Parachute Descent Rate","BASE Jump Altitude","Rock Climb Grade Comparison",
+    "Climbing Hold Force","Rappel Descent Speed","Slacklining Tension",
+    "Surfing Wave Speed","Kiteboarding Power","Wakeboard Rope Length","Wingsuit Glide Ratio",
+    "BMX Jump Distance","Motocross Lap Time","Parkour Jump Distance"
+  ],
+  "Water Sports": [
+    "Kayak Paddle Length","Canoe Speed Efficiency","Stand-Up Paddle Board Pace",
+    "Rowing Erg Split Time","Dragon Boat Pace","Triathlon Transition Time",
+    "Open Water Navigation Bearing","Rowing Power per Stroke","Surfing Wave Score","Freediving Depth Time","Scuba Tank Duration","Dive Profile Plan","Diving Bell Volume","Tidal Current Drift","Sailing VMG (Velocity Made Good)"
+  ],
+  "General Athletics": [
+    "Vertical Jump (Flight Time)","Horizontal Jump Distance","Shot Put Distance Estimate",
+    "Discus Throw Distance","Javelin Throw Distance","Hammer Throw Distance",
+    "High Jump Bar Height","Pole Vault Height","Decathlon Points Score",
+    "Heptathlon Points Score","Triathlon Total Time","Ironman Pace Targets",
+    "Multi-Sport Training Load","Athletic Percentile Rank","Age-Graded Score",
+    "Sprint Reaction Time","Block Clearance Velocity","Relay Exchange Zone","Coaching Periodization Block","Peak Performance Week"]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// PHYSICS  [320]
+// ─────────────────────────────────────────────────────────────────
+"Physics": {
+  "Mechanics": [
+    "Velocity (v=d/t)","Acceleration (a=Δv/t)","Displacement (Kinematics)",
+    "Free Fall Time","Free Fall Distance","Projectile Range",
+    "Projectile Max Height","Projectile Time of Flight","Initial Velocity Components",
+    "Newton's 2nd Law (F=ma)","Net Force","Friction Force",
+    "Normal Force","Inclined Plane Acceleration","Atwood Machine Acceleration",
+    "Spring Force (Hooke's Law)","Spring Potential Energy","Elastic Potential Energy",
+    "Kinetic Energy (½mv²)","Gravitational Potential Energy (mgh)","Work Done (W=F⋅d)",
+    "Power (P=W/t)","Mechanical Advantage","Pulley System Force",
+    "Lever Torque","Gear Ratio (Mechanical)","Hydraulic Press Force",
+    "Momentum (p=mv)","Impulse (J=FΔt)","Conservation of Momentum (Collision)",
+    "Elastic Collision Velocities","Inelastic Collision Velocity","Coefficient of Restitution",
+    "Centripetal Acceleration","Centripetal Force","Orbital Period (Kepler 3rd)",
+    "Escape Velocity","Gravitational Force (Newton)","Gravitational Field Strength",
+    "Satellite Orbital Speed","Geostationary Orbit Altitude","Universal Gravitation Potential",
+    "Moment of Inertia (Rod)","Moment of Inertia (Disk)","Moment of Inertia (Sphere)",
+    "Angular Momentum (L=Iω)","Torque (τ=Iα)","Rolling Without Slipping",
+    "Angular Velocity (ω)","Angular Acceleration (α)","Rotational KE (½Iω²)",
+    "Precession Rate","Gyroscope Stability","Simple Pendulum Period",
+    "Physical Pendulum Period","Torsional Pendulum","Damped Oscillation Amplitude",
+    "Driven Oscillation Resonance","Normal Mode Frequency","Coupled Oscillator"
+  ],
+  "Thermodynamics": [
+    "Ideal Gas Law","Boyle's Law Pressure","Charles's Law Volume",
+    "Gay-Lussac's Law Pressure","Combined Gas Law","Van der Waals Correction",
+    "Root Mean Square Speed","Average Kinetic Energy (3/2 kT)","Maxwell-Boltzmann Speed Peak",
+    "Effusion Rate (Graham)","Internal Energy (U = nCvΔT)","Enthalpy (H = U + PV)",
+    "Entropy Change (ΔS = Q/T)","Gibbs Energy (ΔG)","Helmholtz Energy",
+    "Heat Capacity at Constant P","Heat Capacity at Constant V","Ratio γ (Cp/Cv)",
+    "Carnot Efficiency","Heat Engine Efficiency","Refrigerator COP",
+    "Heat Pump COP","Carnot COP","Otto Cycle Efficiency",
+    "Diesel Cycle Efficiency","Brayton Cycle Efficiency","Rankine Cycle Efficiency",
+    "Stefan-Boltzmann Radiation","Wien's Law Peak Wavelength","Blackbody Intensity",
+    "Thermal Conductivity (Fourier)","Thermal Resistance (R-Value)","Convection Heat Transfer",
+    "Newton's Law of Cooling","Radiation View Factor","Thermal Expansion (Linear)",
+    "Thermal Expansion (Volumetric)","Phase Change Latent Heat","Clausius-Clapeyron"
+  ],
+  "Electromagnetism": [
+    "Coulomb's Law Force","Electric Field (Point Charge)","Electric Potential (V)",
+    "Electric Potential Energy","Capacitance (Parallel Plate)","Capacitance (Cylindrical)",
+    "Capacitors in Series","Capacitors in Parallel","Energy Stored in Capacitor",
+    "Ohm's Law (V=IR)","Resistors in Series","Resistors in Parallel",
+    "Kirchhoff's Voltage Law","Kirchhoff's Current Law","Power Dissipation (P=I²R)",
+    "Wheatstone Bridge Balance","RC Time Constant","RC Charge/Discharge",
+    "Biot-Savart Law (Wire)","Ampere's Law (Solenoid)","Magnetic Field (Loop)",
+    "Force on Moving Charge (Lorentz)","Force on Current-Carrying Wire","Torque on Magnetic Dipole",
+    "Magnetic Flux (Φ=BA)","Faraday's Law EMF","Lenz's Law Direction",
+    "Inductance of Solenoid","RL Time Constant","LC Oscillation Frequency",
+    "RLC Resonance Frequency","RLC Impedance (Z)","AC Phase Angle",
+    "AC Power Factor","Transformer Turns Ratio","Transformer Voltage/Current",
+    "Electromagnetic Wave Speed","Poynting Vector Power","Skin Depth",
+    "Dipole Radiation Power","Synchrotron Radiation","Hall Effect Voltage",
+    "Plasma Frequency","Cyclotron Frequency","Larmor Radius","Magnetization","Susceptibility"
+  ],
+  "Optics": [
+    "Snell's Law Refraction","Critical Angle (Total Internal Reflection)","Brewster's Angle",
+    "Thin Lens Equation","Lens Magnification","Lensmaker's Equation",
+    "Spherical Mirror Equation","Mirror Magnification","Focal Length from Radius",
+    "Diffraction Grating Order","Single-Slit Diffraction Minimum","Double-Slit Fringe Spacing",
+    "Thin Film Interference","Rayleigh Criterion Resolution","Numerical Aperture",
+    "Microscope Magnification","Telescope Magnification","Angular Resolution",
+    "Malus's Law Intensity","Polarization Angle","Optical Path Difference",
+    "Coherence Length","Laser Beam Divergence","Gaussian Beam Waist",
+    "Fabry-Pérot Free Spectral Range","Prism Dispersion Angle","Chromatic Aberration",
+    "f-Number (Camera)","Exposure Value","Depth of Field","Airy Disk Radius"
+  ],
+  "Quantum Mechanics": [
+    "de Broglie Wavelength","Heisenberg Uncertainty (Δx⋅Δp)","Heisenberg Uncertainty (ΔE⋅Δt)",
+    "Photoelectric Effect KE","Photon Energy (E=hf)","Compton Wavelength Shift",
+    "Bohr Radius","Hydrogen Energy Level","Lyman / Balmer Series Wavelength",
+    "Rydberg Formula","Quantum Number Shell Capacity","Pauli Exclusion Principle Count",
+    "Spin-Orbit Coupling","Fine Structure Constant","Particle in Box Energy",
+    "Harmonic Oscillator Energy Level","Tunneling Probability (WKB)","Decay Width (Γ)",
+    "Fermi Energy","Fermi-Dirac Distribution","Bose-Einstein Distribution",
+    "Planck Distribution","Zero-Point Energy","Quantum Harmonic Oscillator Frequency",
+    "Selection Rule Check","Angular Momentum Quantization","Magnetic Quantum Number","Schrödinger Time-Independent Energy","WKB Quantization","Matrix Element"
+  ],
+  "Fluid Mechanics": [
+    "Density (ρ=m/V)","Pressure at Depth (P=ρgh)","Buoyancy Force (Archimedes)",
+    "Continuity Equation (A₁v₁=A₂v₂)","Bernoulli's Equation","Venturi Meter Flow",
+    "Pitot Tube Speed","Torricelli Efflux Velocity","Poiseuille's Law Flow Rate",
+    "Reynolds Number","Laminar vs Turbulent Threshold","Darcy-Weisbach Pressure Drop",
+    "Moody Chart Friction Factor","Minor Loss Coefficient","Pump Power (P=ρgQH)",
+    "Pump Efficiency","NPSH (Net Positive Suction Head)","Drag Force (F=½ρv²CdA)",
+    "Drag Coefficient (Sphere)","Stokes Drag (Low Re)","Terminal Velocity (Stokes)",
+    "Lift Force (Kutta-Joukowski)","Bernoulli Lift","Wing Loading","Froude Number","Weber Number","Mach Number","Shock Wave Angle (Oblique)","Normal Shock Pressure Ratio","Compressible Flow Area-Velocity"
+  ],
+  "Waves & Sound": [
+    "Wave Speed (v=fλ)","Frequency from Period","Wavelength from Speed & Frequency",
+    "Sound Speed in Air (Temperature)","Sound Intensity (W/m²)","Sound Level (dB SPL)",
+    "Sound Level Addition","Inverse Square Law Attenuation","Doppler Effect (Source Moving)",
+    "Doppler Effect (Observer Moving)","Doppler Effect (Both)","Mach Cone Angle",
+    "Resonant Frequency (Closed Pipe)","Resonant Frequency (Open Pipe)","Harmonics Series",
+    "Beat Frequency","String Fundamental Frequency","Standing Wave Node Count",
+    "Acoustic Impedance","Transmission Loss (Soundproofing)","Reverberation Time (RT60)",
+    "Seismic Wave Speed","Earthquake Magnitude Energy","Ultrasound Resolution",
+    "Shock Wave Overpressure","Infrasound Frequency Range","Sonar Range","Radar Range (Radar Equation)","EMP Attenuation","Light Speed Delay"
+  ],
+  "Relativity": [
+    "Time Dilation (γ factor)","Length Contraction","Relativistic Mass",
+    "Relativistic Momentum","Relativistic KE","E=mc² Rest Energy",
+    "Relativistic Velocity Addition","Lorentz Transformation (x′,t′)","Proper Time",
+    "Gravitational Time Dilation (Schwarzschild)","Schwarzschild Radius","Gravitational Redshift",
+    "Light Bending Angle","Frame Dragging Rate","GPS Relativity Correction","Twin Paradox Age Difference"
+  ],
+  "Nuclear & Particle Physics": [
+    "Radioactive Decay Activity","Half-Life to Decay Constant","Decay Constant to Half-Life",
+    "Radiometric Dating Age","Nuclear Binding Energy","Mass Defect",
+    "Q-Value of Reaction","Alpha Decay Product","Beta Decay Neutrino Energy",
+    "Gamma Ray Energy","Fission Energy Release","Fusion Energy Release",
+    "Critical Mass Estimate","Reactor Multiplication Factor (k)","Moderating Ratio","Radiation Dose (Gy to Sv)","LET Radiation","Shielding Half-Value Layer","Cerenkov Threshold","Particle Lifetime"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// STATISTICS  [200]
+// ─────────────────────────────────────────────────────────────────
+"Statistics": {
+  "Descriptive Statistics": [
+    "Mean (Arithmetic)","Weighted Mean","Geometric Mean",
+    "Harmonic Mean","Median","Mode",
+    "Range","Interquartile Range (IQR)","Variance (Population)",
+    "Variance (Sample)","Standard Deviation (Population)","Standard Deviation (Sample)",
+    "Coefficient of Variation (CV)","Skewness","Kurtosis",
+    "Z-Score","Percentile Rank","Quartile Values (Q1/Q2/Q3)",
+    "Box Plot Summary (Five-Number)","Outlier Detection (IQR Rule)",
+    "Outlier Detection (Z-Score)","Mean Absolute Deviation (MAD)","Root Mean Square (RMS)",
+    "Trimmed Mean","Winsorized Mean","Frequency Table","Relative Frequency","Cumulative Frequency","Class Width (Histogram)","Stem-and-Leaf Split","Ogive Percentile","Chebyshev's Interval","Empirical Rule (68-95-99.7)","Covariance","Pearson Correlation (r)"
+  ],
+  "Probability": [
+    "Classical Probability","Complementary Event","Addition Rule (Mutually Exclusive)",
+    "Addition Rule (General)","Multiplication Rule (Independent)","Multiplication Rule (Dependent)",
+    "Conditional Probability P(A|B)","Bayes' Theorem","Law of Total Probability",
+    "Expected Value (Discrete)","Expected Value (Continuous)","Variance of Random Variable",
+    "Moment Generating Function","Probability Generating Function","Odds to Probability",
+    "Probability to Odds","Relative Risk","Odds Ratio",
+    "Sensitivity & Specificity","Positive Predictive Value","Negative Predictive Value",
+    "Likelihood Ratio (+/-)","Pre-Test to Post-Test Probability","Fagan Nomogram",
+    "Risk Difference","Number Needed to Treat","Attributable Risk","Geometric Probability","Buffon's Needle","Monte Carlo Estimate"
+  ],
+  "Distributions": [
+    "Binomial P(X=k)","Binomial Cumulative","Binomial Mean & Variance",
+    "Negative Binomial P(X=k)","Geometric P(X=k)","Hypergeometric P(X=k)",
+    "Poisson P(X=k)","Poisson Cumulative","Poisson Approximation",
+    "Normal P(a < X < b)","Normal Z-score to Probability","Probability to Z-score",
+    "Standard Normal Table","t-Distribution Critical Value","t-Distribution p-value",
+    "Chi-Square Critical Value","Chi-Square p-value","F-Distribution Critical Value",
+    "Exponential Distribution CDF","Gamma Distribution Mean","Beta Distribution Mode",
+    "Uniform Distribution E(X)","Cauchy Distribution Median","Lognormal Mean",
+    "Weibull Survival Function","Pareto Distribution Mean","Laplace Distribution",
+    "Logistic Distribution CDF","Multinomial Probability","Dirichlet Distribution Mode",
+    "Multivariate Normal Density","Mixture Model Weight","Order Statistics (Min/Max)",
+    "Extreme Value (Gumbel)","Copula Correlation"
+  ],
+  "Hypothesis Testing": [
+    "One-Sample Z-Test","One-Sample t-Test","Two-Sample Z-Test",
+    "Two-Sample t-Test (Equal Var)","Two-Sample t-Test (Welch)","Paired t-Test",
+    "One-Proportion Z-Test","Two-Proportion Z-Test","Chi-Square Goodness of Fit",
+    "Chi-Square Test of Independence","Fisher's Exact Test","McNemar's Test",
+    "One-Way ANOVA F-Statistic","Two-Way ANOVA","Repeated Measures ANOVA",
+    "Tukey HSD Post-Hoc","Bonferroni Correction","Holm-Bonferroni",
+    "Kruskal-Wallis Test","Mann-Whitney U Test","Wilcoxon Signed-Rank",
+    "Sign Test","Friedman Test","Runs Test (Randomness)",
+    "Kolmogorov-Smirnov Test","Shapiro-Wilk Power","Anderson-Darling Test",
+    "Levene's Test (Equal Variance)","Bartlett's Test","Type I & II Error Rates",
+    "Statistical Power","Sample Size (Z-Test)","Sample Size (t-Test)",
+    "Sample Size (Proportion)","Effect Size (Cohen's d)","Effect Size (Cohen's f)"
+  ],
+  "Regression & Correlation": [
+    "Simple Linear Regression","Multiple Linear Regression Coefficients","R-Squared (R²)",
+    "Adjusted R-Squared","Residual Standard Error","F-Test for Regression",
+    "t-Test for Coefficient","Confidence Interval for Slope","Prediction Interval",
+    "Logistic Regression Odds","Logistic Log-Odds to Probability","Logistic AIC/BIC",
+    "Polynomial Regression Fit","Spearman Rank Correlation","Kendall's Tau",
+    "Point-Biserial Correlation","Partial Correlation","Semipartial Correlation",
+    "Multicollinearity VIF","Cook's Distance","Leverage (Hat Matrix)",
+    "Durbin-Watson Autocorrelation","Ridge Regression Lambda","LASSO Path","Elastic Net Mix"
+  ],
+  "Sampling & Survey": [
+    "Simple Random Sample Size","Stratified Sample Allocation","Cluster Sample Size",
+    "Systematic Sample Interval","Margin of Error","Confidence Interval (Mean)",
+    "Confidence Interval (Proportion)","Finite Population Correction","Nonresponse Bias",
+    "Survey Weighting","Bootstrap Confidence Interval","Jackknife Estimate","Cross-Validation MSE",
+    "AIC Information Criterion","BIC","Effective Sample Size (ESS)","Design Effect (DEFF)",
+    "Oversampling Rate","Quota Calculation","Response Rate %"
+  ],
+  "Bayesian Statistics": [
+    "Prior × Likelihood → Posterior","Beta-Binomial Conjugate","Normal-Normal Conjugate",
+    "Gamma-Poisson Conjugate","Dirichlet-Multinomial Conjugate","MAP Estimate",
+    "Credible Interval","Highest Posterior Density","Bayes Factor",
+    "Marginal Likelihood","Posterior Predictive","MCMC Acceptance Rate",
+    "Effective Sample Size (MCMC)","Gelman-Rubin R-hat","Information Criterion (WAIC)",
+    "Bayesian A/B Test","Bayesian Power","Prior Sensitivity","Expected Posterior Loss","Decision Theory Utility"
+  ]
+},
+
+// ─────────────────────────────────────────────────────────────────
+// OTHER CALCULATORS  [134]
+// ─────────────────────────────────────────────────────────────────
+"Other Calculators": {
+  "Astronomy & Space": [
+    "Planet Weight Calculator","Escape Velocity (Planets)","Orbital Period (Kepler)",
+    "Asteroid Impact Energy","Comet Perihelion Date","Black Hole Schwarzschild Radius",
+    "Neutron Star Density","Pulsar Rotation Rate","Redshift to Distance",
+    "Hubble Distance","Cosmic Age Lookup","Star Luminosity (Stefan-Boltzmann)",
+    "Star Mass from Luminosity","Stellar Lifetime Estimate","Habitable Zone Distance",
+    "Exoplanet Transit Depth","Rocket Delta-V (Tsiolkovsky)","Hohmann Transfer Δv",
+    "Lagrange Point Distance","Tidal Locking Timescale"
+  ],
+  "Geography & Maps": [
+    "Haversine Great-Circle Distance","Rhumb Line Distance","GPS to UTM Conversion",
+    "UTM to GPS","MGRS Coordinate","Latitude/Longitude Decimal ↔ DMS",
+    "Map Scale Calculator","Topographic Slope (%)","Aspect from DEM",
+    "Watershed Delineation Area","Population Density per km²","Country Area Comparison",
+    "City Distance Airline","Elevation Above Sea Level","Terrain Ruggedness Index",
+    "Land Cover % (NDVI hint)","Flood Plain Width","Tidal Datum Conversion",
+    "Maritime Zone Boundary","Geoid Height Correction"
+  ],
+  "Music & Audio": [
+    "Note Frequency (Equal Temperament)","MIDI Note to Frequency","Octave Relationship",
+    "Interval Cents","BPM to Milliseconds (Delay)","Tempo to Note Duration",
+    "Audio Wavelength at Frequency","Room Mode Frequency","Reverb RT60",
+    "Speaker SPL at Distance","Decibel Addition","Headphone Impedance Match",
+    "Amplifier Power to SPL","Crossover Frequency","Audio Bitrate & File Size","LUFS Loudness Normalize"
+  ],
+  "Pets & Animals": [
+    "Dog Age in Human Years","Cat Age in Human Years","Pet Weight vs Breed Average",
+    "Pet Calorie Need (RER)","Dog Medication Dose (Weight)","Cat Medication Dose",
+    "Aquarium Water Volume","Fish Tank Stocking Density","Aquarium Heater Wattage",
+    "Bird Cage Volume","Horse Feed Ration","Chicken Egg Production Rate",
+    "Rabbit Litter Size","Guinea Pig Vitamin C Need","Reptile UV Index Need"
+  ],
+  "Gaming & Esports": [
+    "Chess ELO Rating Change (K-factor)","Glicko-2 Rating Update","TrueSkill Estimate",
+    "DPS (Damage Per Second)","Tank HP Buffer Time","Healing Per Second (HPS)",
+    "Kill/Death Ratio (KDR)","Win Rate % Impact","League Rank LP Estimate",
+    "CSGO Rating (HLTV)","Poker EV (Pot Odds)","Blackjack Card Count Running",
+    "Speedrun Pace (Split Diff)","Frame Data (Input Lag ms)","FPS to Frame Time"
+  ],
+  "Miscellaneous Engineering": [
+    "Gear Train Ratio","Belt Drive Speed Ratio","Cam Follower Lift",
+    "Shaft Torsional Stress","Beam Bending Stress (σ=Mc/I)","Column Buckling (Euler)",
+    "Fatigue Limit (S-N Curve)","Factor of Safety","Stress Concentration (Kt)",
+    "Material Thermal Stress","Welding Heat Input","Casting Shrinkage",
+    "Injection Mold Fill Time","CNC Feed Rate","Machining Surface Roughness (Ra)",
+    "Tolerance Stack-Up","GD&T Bonus Tolerance","Pneumatic Cylinder Force","Hydraulic Cylinder Force","Solenoid Holding Force"
+  ],
+  "Legal & Compliance": [
+    "Statute of Limitations Deadline","Contract Breach Damages Estimate","Legal Interest Rate",
+    "Court Filing Fee Estimate","Alimony Duration Estimate","Child Support Guideline",
+    "Estate Distribution (Intestate)","Probate Timeline","Trademark Class Search",
+    "Patent Maintenance Fee Due","GDPR Fine Estimate","OSHA Penalty Calculator",
+    "Workers' Comp Benefit","Disability Benefit Estimate","ADA Compliance Score",
+    "FMLA Leave Days","Non-Compete Radius Check"
+  ],
+  "Educational Tools": [
+    "GPA Converter (4.0 Scale)","CGPA to Percentage","Grade Letter to GPA",
+    "Test Score to Percentile","SAT to ACT Conversion","ACT to SAT Conversion",
+    "IQ Percentile Rank","Study Hours per Credit Hour","Deadline Days Remaining",
+    "Assignment Weight Impact","Extra Credit Needed","Final Exam Score Needed",
+    "Class Rank from Percentile","AP Score to College Credit","IELTS to TOEFL Score","Scholarship GPA Requirement"
+  ]
+}
+
+}; // end CALC_DATA
+
+// Count total calculators
+let TOTAL = 0;
+const CAT_COUNTS = {};
+for (const cat in CALC_DATA) {
+  let c = 0;
+  for (const sub in CALC_DATA[cat]) c += CALC_DATA[cat][sub].length;
+  CAT_COUNTS[cat] = c;
+  TOTAL += c;
+}
+console.log("Total calculators:", TOTAL);
+
+</script>
+<script>
+// ─── category metadata ───────────────────────────────────────────
+const CAT_META = {
+  "Biology":          {icon:"🧬", color:"#22d3a3"},
+  "Chemistry":        {icon:"⚗️",  color:"#7c5ef7"},
+  "Construction":     {icon:"🏗️", color:"#f78c48"},
+  "Conversion":       {icon:"🔄", color:"#4f8ef7"},
+  "Ecology":          {icon:"🌿", color:"#22d3a3"},
+  "Everyday Life":    {icon:"🏠", color:"#f7c948"},
+  "Finance":          {icon:"💰", color:"#22d3a3"},
+  "Food":             {icon:"🍎", color:"#f75e6e"},
+  "Health":           {icon:"❤️", color:"#f75e6e"},
+  "Math":             {icon:"📐", color:"#4f8ef7"},
+  "Sports":           {icon:"⚽", color:"#f78c48"},
+  "Physics":          {icon:"⚡", color:"#f7c948"},
+  "Statistics":       {icon:"📊", color:"#7c5ef7"},
+  "Other Calculators":{icon:"🔧", color:"#7c8db5"},
+};
+
+// ─── state ────────────────────────────────────────────────────────
+let state = {view:"home", cat:null, sub:null, calc:null, query:""};
+
+// ─── build flat index ─────────────────────────────────────────────
+const FLAT = [];
+for (const cat in CALC_DATA) {
+  for (const sub in CALC_DATA[cat]) {
+    CALC_DATA[cat][sub].forEach(name => FLAT.push({cat, sub, name}));
+  }
+}
+
+// ─── routing ────────────────────────────────────────────────────
+function goHome() {
+  state = {view:"home", cat:null, sub:null, calc:null, query:""};
+  document.getElementById("search").value = "";
+  renderMain();
+}
+
+function goCategory(cat) {
+  state = {view:"category", cat, sub:null, calc:null, query:""};
+  document.getElementById("search").value = "";
+  renderMain();
+}
+
+function goSubcat(cat, sub) {
+  state = {view:"subcategory", cat, sub, calc:null, query:""};
+  document.getElementById("search").value = "";
+  renderMain();
+}
+
+function goCalc(cat, sub, name) {
+  state = {view:"calc", cat, sub, calc:name, query:""};
+  document.getElementById("search").value = "";
+  renderMain();
+  window.scrollTo(0,0);
+  document.getElementById("main").scrollTop = 0;
+}
+
+// ─── render main ────────────────────────────────────────────────
+function renderMain() {
+  const main = document.getElementById("main");
+  if (state.view === "home")          return main.innerHTML = renderHome();
+  if (state.view === "category")      return main.innerHTML = renderCategory();
+  if (state.view === "subcategory")   return main.innerHTML = renderSubcategory();
+  if (state.view === "calc")          return main.innerHTML = renderCalc(), initCalc();
+  if (state.view === "search")        return main.innerHTML = renderSearch();
+}
+
+// ─── HOME ────────────────────────────────────────────────────────
+function renderHome() {
+  let cats = "";
+  for (const cat in CALC_DATA) {
+    const m = CAT_META[cat] || {icon:"🔷"};
+    cats += `<div class="cat-card" onclick="goCategory('${cat}')">
+      <div class="cc-icon">${m.icon}</div>
+      <div class="cc-name">${cat}</div>
+      <div class="cc-count">${CAT_COUNTS[cat]} calculators</div>
+    </div>`;
+  }
+  return `<div id="home-header">
+    <h1>Calculator 4 Me</h1>
+    <p>3,854 calculators across 14 categories — search or browse by topic</p>
+  </div>
+  <div class="cat-grid">${cats}</div>`;
+}
+
+// ─── CATEGORY ────────────────────────────────────────────────────
+function renderCategory() {
+  const {cat} = state;
+  const m = CAT_META[cat] || {icon:"🔷"};
+  const subs = CALC_DATA[cat];
+  let html = `<div id="view-header">
+    <h2>${m.icon} ${cat}</h2>
+    <p style="color:var(--muted);font-size:13px">${CAT_COUNTS[cat]} calculators across ${Object.keys(subs).length} subcategories</p>
+  </div>`;
+  for (const sub in subs) {
+    const calcs = subs[sub];
+    html += `<div class="sub-section">
+      <h3>${sub} <span class="sc">${calcs.length} calculators</span></h3>
+      <div class="calc-grid">`;
+    calcs.forEach(name => {
+      html += `<div class="calc-card" onclick="goCalc('${esc(cat)}','${esc(sub)}','${esc(name)}')">
+        <span>${name}</span><span class="arrow">›</span>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+  return html;
+}
+
+// ─── SUBCATEGORY ─────────────────────────────────────────────────
+function renderSubcategory() {
+  const {cat, sub} = state;
+  const m = CAT_META[cat] || {icon:"🔷"};
+  const calcs = CALC_DATA[cat][sub];
+  let cards = calcs.map(name =>
+    `<div class="calc-card" onclick="goCalc('${esc(cat)}','${esc(sub)}','${esc(name)}')">
+      <span>${name}</span><span class="arrow">›</span>
+    </div>`).join("");
+  return `<div id="view-header">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <button onclick="goCategory('${esc(cat)}')" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">← ${cat}</button>
+    </div>
+    <h2>${m.icon} ${sub}</h2>
+    <p style="color:var(--muted);font-size:13px">${calcs.length} calculators</p>
+  </div>
+  <div class="calc-grid">${cards}</div>`;
+}
+
+// ─── SEARCH ──────────────────────────────────────────────────────
+function onSearch(q) {
+  q = q.trim();
+  if (!q) { goHome(); return; }
+  state = {view:"search", cat:null, sub:null, calc:null, query:q};
+  renderMain();
+}
+
+function renderSearch() {
+  const q = state.query.toLowerCase();
+  const results = FLAT.filter(r =>
+    r.name.toLowerCase().includes(q) ||
+    r.sub.toLowerCase().includes(q) ||
+    r.cat.toLowerCase().includes(q)
+  ).slice(0, 200);
+  let cards = results.map(r =>
+    `<div class="calc-card" onclick="goCalc('${esc(r.cat)}','${esc(r.sub)}','${esc(r.name)}')">
+      <div>
+        <span>${highlight(r.name, q)}</span><br>
+        <span style="font-size:11px;color:var(--muted)">${r.cat} › ${r.sub}</span>
+      </div>
+      <span class="arrow">›</span>
+    </div>`).join("");
+  if (!results.length) cards = `<div class="no-result"><div class="nr-icon">🔍</div>No calculators found for "<strong>${state.query}</strong>"</div>`;
+  return `<div id="search-results">
+    <h2>Search Results</h2>
+    <p class="sr-count">${results.length} result${results.length!==1?"s":""} for "<strong>${state.query}</strong>"</p>
+    <div class="calc-grid">${cards}</div>
+  </div>`;
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, "gi");
+  return text.replace(re, `<mark style="background:rgba(79,142,247,.3);color:var(--text);border-radius:2px">$1</mark>`);
+}
+
+// ─── CALCULATOR VIEW ─────────────────────────────────────────────
+function renderCalc() {
+  const {cat, sub, calc} = state;
+  const impl = IMPLS[calc];
+  const m = CAT_META[cat] || {icon:"🔷"};
+  let inner = impl ? impl.html : genericHtml(calc);
+  return `<div id="calc-view">
+    <div class="cv-back" onclick="goSubcat('${esc(cat)}','${esc(sub)}')">← Back to ${sub}</div>
+    <h2>${calc}</h2>
+    <div class="breadcrumb">${m.icon} ${cat} › <span>${sub}</span></div>
+    <div class="calc-box">${inner}</div>
+    ${impl && impl.formula ? `<div class="formula-box"><strong>Formula / Method</strong>${impl.formula}</div>` : ''}
+  </div>`;
+}
+
+function genericHtml(name) {
+  return `<p style="color:var(--muted);font-size:13px;margin-bottom:18px">Enter the required values below to calculate.</p>
+  <div class="generic-inputs" id="generic-inputs">
+    <div class="field-row"><label>Value A</label><input type="number" id="ga" placeholder="0" step="any"></div>
+    <div class="field-row"><label>Value B</label><input type="number" id="gb" placeholder="0" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="genericCalc()">Calculate</button>
+  <div class="result-box" id="result-box">
+    <div style="color:var(--muted);font-size:13px;text-align:center;padding:10px">Enter values and press Calculate</div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:12px">This calculator provides a standardized input interface. For full formula details, consult subject-specific resources.</p>`;
+}
+
+function genericCalc() {
+  const a = parseFloat(document.getElementById("ga")?.value) || 0;
+  const b = parseFloat(document.getElementById("gb")?.value) || 0;
+  setResult([{l:"Result (A + B)", v: fmt(a+b)}, {l:"Result (A × B)", v: fmt(a*b)}, {l:"Result (A / B)", v: b!==0 ? fmt(a/b) : "undefined"}]);
+}
+
+// ─── IMPLEMENTATIONS ─────────────────────────────────────────────
+const IMPLS = {};
+
+// helper: set results
+function setResult(rows, note) {
+  const box = document.getElementById("result-box");
+  if (!box) return;
+  let html = rows.map(r => `<div class="result-row"><span class="rl">${r.l}</span><span class="rv">${r.v}</span></div>`).join("");
+  if (note) html += `<div class="result-note">${note}</div>`;
+  box.innerHTML = html;
+}
+
+function fmt(n, dec=4) {
+  if (!isFinite(n)) return "undefined";
+  if (Math.abs(n) > 1e10 || (Math.abs(n) < 1e-4 && n!==0)) return n.toExponential(4);
+  return parseFloat(n.toFixed(dec)).toLocaleString(undefined,{maximumFractionDigits:dec});
+}
+function fmtUnit(n, unit, dec=4) { return fmt(n,dec) + " " + unit; }
+
+function initCalc() {
+  const impl = IMPLS[state.calc];
+  if (impl && impl.init) impl.init();
+}
+
+// ─────────────────── BMI ──────────────────────────────────────────
+IMPLS["BMI (Body Mass Index)"] = {
+  html: `<div class="field-row"><label>Weight</label><div style="display:flex;gap:8px">
+    <input type="number" id="bmi-w" placeholder="70" step="any" style="flex:1">
+    <select id="bmi-wu"><option value="kg">kg</option><option value="lb">lb</option></select>
+  </div></div>
+  <div class="field-row"><label>Height</label><div style="display:flex;gap:8px">
+    <input type="number" id="bmi-h" placeholder="175" step="any" style="flex:1">
+    <select id="bmi-hu"><option value="cm">cm</option><option value="in">in</option><option value="ft">ft</option></select>
+  </div></div>
+  <button class="calc-btn" onclick="calcBMI()">Calculate BMI</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula: "BMI = weight(kg) / height(m)²"
+};
+function calcBMI() {
+  let w = parseFloat(document.getElementById("bmi-w").value);
+  let h = parseFloat(document.getElementById("bmi-h").value);
+  const wu = document.getElementById("bmi-wu").value;
+  const hu = document.getElementById("bmi-hu").value;
+  if (isNaN(w)||isNaN(h)||w<=0||h<=0) return setResult([{l:"Error",v:"Enter valid values"}]);
+  if (wu==="lb") w *= 0.453592;
+  if (hu==="cm") h /= 100;
+  else if (hu==="ft") h *= 0.3048;
+  else if (hu==="in") h *= 0.0254;
+  const bmi = w / (h*h);
+  let cat = bmi<18.5?"Underweight":bmi<25?"Normal weight":bmi<30?"Overweight":"Obese";
+  setResult([
+    {l:"BMI",v:fmt(bmi,1)+" kg/m²"},
+    {l:"Category",v:cat},
+    {l:"Healthy range",v:"18.5 – 24.9"}
+  ]);
+}
+
+// ─────────────────── AGE ─────────────────────────────────────────
+IMPLS["Age Calculator"] = {
+  html: `<div class="field-row"><label>Date of Birth</label><input type="date" id="age-dob"></div>
+  <div class="field-row"><label>Age On Date (leave blank for today)</label><input type="date" id="age-to"></div>
+  <button class="calc-btn" onclick="calcAge()">Calculate Age</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula: "Calculates exact years, months, and days between two dates."
+};
+function calcAge() {
+  const dob = new Date(document.getElementById("age-dob").value);
+  const to  = document.getElementById("age-to").value ? new Date(document.getElementById("age-to").value) : new Date();
+  if (isNaN(dob)) return setResult([{l:"Error",v:"Select date of birth"}]);
+  let y = to.getFullYear()-dob.getFullYear(), m = to.getMonth()-dob.getMonth(), d = to.getDate()-dob.getDate();
+  if (d<0){m--;d+=new Date(to.getFullYear(),to.getMonth(),0).getDate()}
+  if (m<0){y--;m+=12}
+  const days = Math.floor((to-dob)/86400000);
+  setResult([{l:"Age",v:`${y} years, ${m} months, ${d} days`},{l:"Total days",v:days.toLocaleString()},{l:"Weeks",v:Math.floor(days/7).toLocaleString()}]);
+}
+
+// ─────────────────── COMPOUND INTEREST ───────────────────────────
+IMPLS["Compound Interest"] = {
+  html: `<div class="generic-inputs">
+  <div class="field-row"><label>Principal ($)</label><input type="number" id="ci-p" placeholder="10000" step="any"></div>
+  <div class="field-row"><label>Annual Rate (%)</label><input type="number" id="ci-r" placeholder="7" step="any"></div>
+  <div class="field-row"><label>Time (years)</label><input type="number" id="ci-t" placeholder="10" step="any"></div>
+  <div class="field-row"><label>Compounding</label><select id="ci-n">
+    <option value="1">Annually</option><option value="2">Semi-annually</option>
+    <option value="4">Quarterly</option><option value="12" selected>Monthly</option>
+    <option value="365">Daily</option>
+  </select></div>
+  </div>
+  <button class="calc-btn" onclick="calcCI()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula: "A = P × (1 + r/n)^(n×t) — where P=principal, r=annual rate, n=compounds/year, t=years"
+};
+function calcCI() {
+  const P=parseFloat(document.getElementById("ci-p").value);
+  const r=parseFloat(document.getElementById("ci-r").value)/100;
+  const t=parseFloat(document.getElementById("ci-t").value);
+  const n=parseFloat(document.getElementById("ci-n").value);
+  if ([P,r,t,n].some(isNaN)||P<=0) return setResult([{l:"Error",v:"Enter valid values"}]);
+  const A = P*Math.pow(1+r/n,n*t);
+  setResult([{l:"Future Value",v:"$"+fmt(A,2)},{l:"Interest Earned",v:"$"+fmt(A-P,2)},{l:"Return",v:fmt((A-P)/P*100,2)+"%"}]);
+}
+
+// ─────────────────── MORTGAGE ─────────────────────────────────────
+IMPLS["Mortgage Payment"] = IMPLS["Mortgage Monthly Payment"] = IMPLS["Monthly Loan Payment"] = {
+  html: `<div class="generic-inputs">
+  <div class="field-row"><label>Loan Amount ($)</label><input type="number" id="m-p" placeholder="300000" step="any"></div>
+  <div class="field-row"><label>Annual Interest Rate (%)</label><input type="number" id="m-r" placeholder="6.5" step="any"></div>
+  <div class="field-row"><label>Loan Term (years)</label><input type="number" id="m-t" placeholder="30" step="any"></div>
+  <div class="field-row"><label>Extra Monthly Payment ($)</label><input type="number" id="m-e" placeholder="0" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcMortgage()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula: "M = P × [r(1+r)^n] / [(1+r)^n − 1] — r = monthly rate, n = total payments"
+};
+function calcMortgage() {
+  const P=parseFloat(document.getElementById("m-p").value);
+  const r=parseFloat(document.getElementById("m-r").value)/100/12;
+  const n=parseFloat(document.getElementById("m-t").value)*12;
+  const extra=parseFloat(document.getElementById("m-e").value)||0;
+  if ([P,r,n].some(isNaN)||P<=0) return setResult([{l:"Error",v:"Enter valid values"}]);
+  const M = r===0?P/n : P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  const total=M*n; const interest=total-P;
+  let payoffMonths=n, bal=P, withExtra=M+extra, intPaid=0;
+  if (extra>0){payoffMonths=0;while(bal>0&&payoffMonths<1200){const i=bal*r;bal=bal+i-withExtra;intPaid+=i;payoffMonths++;if(bal<0)bal=0;}}
+  setResult([
+    {l:"Monthly Payment",v:"$"+fmt(M,2)},
+    {l:"Total Paid (no extra)",v:"$"+fmt(total,2)},
+    {l:"Total Interest",v:"$"+fmt(interest,2)},
+    ...(extra>0?[{l:"Payoff with extra",v:`${Math.floor(payoffMonths/12)}y ${payoffMonths%12}m`},{l:"Interest saved",v:"$"+fmt(interest-intPaid,2)}]:[])
+  ]);
+}
+
+// ─────────────────── TIP ─────────────────────────────────────────
+IMPLS["Tip Calculator"] = {
+  html: `<div class="generic-inputs">
+  <div class="field-row"><label>Bill Amount ($)</label><input type="number" id="tip-bill" placeholder="85.50" step="any"></div>
+  <div class="field-row"><label>Tip %</label><input type="number" id="tip-pct" placeholder="18" step="any"></div>
+  <div class="field-row"><label>Split Between (people)</label><input type="number" id="tip-split" placeholder="2" step="1"></div>
+  <div class="field-row"><label>Tax ($, optional)</label><input type="number" id="tip-tax" placeholder="0" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcTip()">Calculate Tip</button>
+  <div class="result-box" id="result-box"></div>`,
+};
+function calcTip() {
+  const bill=parseFloat(document.getElementById("tip-bill").value)||0;
+  const pct=parseFloat(document.getElementById("tip-pct").value)||0;
+  const split=Math.max(1,parseInt(document.getElementById("tip-split").value)||1);
+  const tax=parseFloat(document.getElementById("tip-tax").value)||0;
+  const tip=bill*(pct/100);
+  const total=bill+tip+tax;
+  setResult([{l:"Tip Amount",v:"$"+fmt(tip,2)},{l:"Total Bill",v:"$"+fmt(total,2)},{l:"Per Person",v:"$"+fmt(total/split,2)},{l:"Tip per Person",v:"$"+fmt(tip/split,2)}]);
+}
+
+// ─────────────────── PERCENTAGE ──────────────────────────────────
+IMPLS["Percentage Change"] = IMPLS["Percentage Savings"] = IMPLS["Percent of Number"] = {
+  html: `<div class="field-row"><label>Mode</label><select id="pct-mode" onchange="updatePctMode()">
+    <option value="of">What is X% of Y?</option>
+    <option value="change">Percent change from A to B</option>
+    <option value="what">X is what % of Y?</option>
+    <option value="add">Add X% to Y</option>
+    <option value="sub">Subtract X% from Y</option>
+  </select></div>
+  <div id="pct-fields"></div>
+  <button class="calc-btn" onclick="calcPct()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  init: function(){updatePctMode()}
+};
+function updatePctMode(){
+  const mode=document.getElementById("pct-mode")?.value;
+  const fields=document.getElementById("pct-fields");
+  if(!fields)return;
+  const modes={
+    of:`<div class="generic-inputs"><div class="field-row"><label>Percentage (X %)</label><input type="number" id="pa" step="any" placeholder="15"></div><div class="field-row"><label>Of (Y)</label><input type="number" id="pb" step="any" placeholder="200"></div></div>`,
+    change:`<div class="generic-inputs"><div class="field-row"><label>From value (A)</label><input type="number" id="pa" step="any" placeholder="80"></div><div class="field-row"><label>To value (B)</label><input type="number" id="pb" step="any" placeholder="100"></div></div>`,
+    what:`<div class="generic-inputs"><div class="field-row"><label>Part (X)</label><input type="number" id="pa" step="any" placeholder="30"></div><div class="field-row"><label>Whole (Y)</label><input type="number" id="pb" step="any" placeholder="200"></div></div>`,
+    add:`<div class="generic-inputs"><div class="field-row"><label>Base Value (Y)</label><input type="number" id="pa" step="any" placeholder="100"></div><div class="field-row"><label>Add X%</label><input type="number" id="pb" step="any" placeholder="20"></div></div>`,
+    sub:`<div class="generic-inputs"><div class="field-row"><label>Base Value (Y)</label><input type="number" id="pa" step="any" placeholder="100"></div><div class="field-row"><label>Subtract X%</label><input type="number" id="pb" step="any" placeholder="20"></div></div>`,
+  };
+  fields.innerHTML = modes[mode]||"";
+}
+function calcPct(){
+  const mode=document.getElementById("pct-mode").value;
+  const a=parseFloat(document.getElementById("pa")?.value)||0;
+  const b=parseFloat(document.getElementById("pb")?.value)||0;
+  const res={
+    of:()=>[{l:"Result",v:fmt(a/100*b)},{l:"Formula",v:`${a}% × ${b}`}],
+    change:()=>[{l:"% Change",v:fmt((b-a)/Math.abs(a)*100,4)+"%"},{l:"Absolute change",v:fmt(b-a)}],
+    what:()=>[{l:"Percentage",v:fmt(a/b*100,4)+"%"}],
+    add:()=>[{l:"Result",v:fmt(a*(1+b/100),4)},{l:"Increase",v:fmt(a*b/100,4)}],
+    sub:()=>[{l:"Result",v:fmt(a*(1-b/100),4)},{l:"Decrease",v:fmt(a*b/100,4)}],
+  };
+  setResult(res[mode]());
+}
+
+// ─────────────────── TEMPERATURE ─────────────────────────────────
+IMPLS["Celsius to Fahrenheit"] = IMPLS["Fahrenheit to Celsius"] = IMPLS["Celsius to Kelvin"] = IMPLS["Kelvin to Celsius"] = IMPLS["Fahrenheit to Kelvin"] = IMPLS["Kelvin to Fahrenheit"] = {
+  html:`<div class="field-row"><label>From Unit</label><select id="temp-from"><option value="C">Celsius (°C)</option><option value="F">Fahrenheit (°F)</option><option value="K">Kelvin (K)</option><option value="R">Rankine (°R)</option></select></div>
+  <div class="field-row"><label>Temperature</label><input type="number" id="temp-val" placeholder="0" step="any"></div>
+  <button class="calc-btn" onclick="calcTemp()">Convert</button>
+  <div class="result-box" id="result-box"></div>`,
+  init:function(){const n=state.calc;const map={"Celsius to Fahrenheit":["C","F"],"Fahrenheit to Celsius":["F","C"],"Celsius to Kelvin":["C","K"],"Kelvin to Celsius":["K","C"],"Fahrenheit to Kelvin":["F","K"],"Kelvin to Fahrenheit":["K","F"]};const s=map[n];if(s&&document.getElementById("temp-from"))document.getElementById("temp-from").value=s[0];}
+};
+function calcTemp(){
+  const from=document.getElementById("temp-from").value;
+  const v=parseFloat(document.getElementById("temp-val").value);
+  if(isNaN(v))return setResult([{l:"Error",v:"Enter a temperature"}]);
+  let C=v;
+  if(from==="F") C=(v-32)*5/9;
+  if(from==="K") C=v-273.15;
+  if(from==="R") C=(v-491.67)*5/9;
+  const F=C*9/5+32, K=C+273.15, R=F+459.67;
+  setResult([{l:"Celsius",v:fmt(C,4)+" °C"},{l:"Fahrenheit",v:fmt(F,4)+" °F"},{l:"Kelvin",v:fmt(K,4)+" K"},{l:"Rankine",v:fmt(R,4)+" °R"}]);
+}
+
+// ─────────────────── LOAN PAYMENT ────────────────────────────────
+IMPLS["Loan Payment Calculator"] = IMPLS["Auto Loan Payment"] = IMPLS["Personal Loan Cost"] = IMPLS["Car Loan Monthly Payment"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Loan Amount ($)</label><input type="number" id="lp-p" placeholder="25000" step="any"></div>
+  <div class="field-row"><label>Annual Rate (%)</label><input type="number" id="lp-r" placeholder="5.5" step="any"></div>
+  <div class="field-row"><label>Term</label><input type="number" id="lp-t" placeholder="60" step="any"></div>
+  <div class="field-row"><label>Term Unit</label><select id="lp-tu"><option value="12">Years</option><option value="1" selected>Months</option></select></div>
+  </div>
+  <button class="calc-btn" onclick="calcLoan()">Calculate Payment</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"M = P × [r(1+r)^n] / [(1+r)^n − 1]"
+};
+function calcLoan(){
+  const P=parseFloat(document.getElementById("lp-p").value);
+  const r=parseFloat(document.getElementById("lp-r").value)/100/12;
+  const tu=parseFloat(document.getElementById("lp-tu").value);
+  const n=parseFloat(document.getElementById("lp-t").value)*tu;
+  if([P,r,n].some(isNaN)||P<=0)return setResult([{l:"Error",v:"Enter valid values"}]);
+  const M=r===0?P/n:P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  setResult([{l:"Monthly Payment",v:"$"+fmt(M,2)},{l:"Total Paid",v:"$"+fmt(M*n,2)},{l:"Total Interest",v:"$"+fmt(M*n-P,2)}]);
+}
+
+// ─────────────────── GPA ─────────────────────────────────────────
+IMPLS["Weighted GPA"] = IMPLS["GPA Calculator"] = IMPLS["Grade Average Calculator"] = {
+  html:`<div id="gpa-rows"></div>
+  <button onclick="addGpaRow()" style="background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:16px">+ Add Course</button>
+  <button class="calc-btn" onclick="calcGPA()">Calculate GPA</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"GPA = Σ(grade_points × credits) / Σcredits",
+  init:function(){addGpaRow();addGpaRow();addGpaRow();}
+};
+let gpaCount=0;
+function addGpaRow(){
+  gpaCount++;
+  const div=document.createElement("div");
+  div.style.cssText="display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-bottom:8px;align-items:end";
+  div.innerHTML=`<div class="field-row" style="margin:0"><label>Course ${gpaCount}</label>
+    <select id="g-grade-${gpaCount}">
+      <option value="4.0">A (4.0)</option><option value="3.7">A- (3.7)</option>
+      <option value="3.3">B+ (3.3)</option><option value="3.0">B (3.0)</option>
+      <option value="2.7">B- (2.7)</option><option value="2.3">C+ (2.3)</option>
+      <option value="2.0">C (2.0)</option><option value="1.7">C- (1.7)</option>
+      <option value="1.3">D+ (1.3)</option><option value="1.0">D (1.0)</option>
+      <option value="0.0">F (0.0)</option>
+    </select></div>
+  <div class="field-row" style="margin:0"><label>Credits</label><input type="number" id="g-cr-${gpaCount}" value="3" min="0.5" step="0.5" style="width:70px"></div>
+  <button onclick="this.parentNode.remove()" style="background:var(--card2);border:1px solid var(--border);color:var(--muted);padding:9px 10px;border-radius:6px;cursor:pointer;height:38px;align-self:end">✕</button>`;
+  document.getElementById("gpa-rows").appendChild(div);
+}
+function calcGPA(){
+  let totalPts=0,totalCr=0;
+  for(let i=1;i<=gpaCount;i++){
+    const g=document.getElementById(`g-grade-${i}`);
+    const c=document.getElementById(`g-cr-${i}`);
+    if(g&&c){totalPts+=parseFloat(g.value)*parseFloat(c.value);totalCr+=parseFloat(c.value);}
+  }
+  if(!totalCr)return setResult([{l:"Error",v:"Add at least one course"}]);
+  const gpa=totalPts/totalCr;
+  setResult([{l:"GPA",v:fmt(gpa,3)+" / 4.0"},{l:"Total Credits",v:totalCr},{l:"Letter Grade",v:gpa>=3.7?"A":gpa>=3.3?"A-":gpa>=3.0?"B+":gpa>=2.7?"B":gpa>=2.3?"B-":gpa>=2.0?"C+":gpa>=1.7?"C":gpa>=1.0?"D":"F"}]);
+}
+
+// ─────────────────── QUADRATIC ───────────────────────────────────
+IMPLS["Quadratic Formula"] = {
+  html:`<p style="color:var(--muted);font-size:13px;margin-bottom:16px">Solves ax² + bx + c = 0</p>
+  <div class="generic-inputs">
+  <div class="field-row"><label>a (coefficient of x²)</label><input type="number" id="qa" placeholder="1" step="any"></div>
+  <div class="field-row"><label>b (coefficient of x)</label><input type="number" id="qb" placeholder="-5" step="any"></div>
+  <div class="field-row"><label>c (constant)</label><input type="number" id="qc" placeholder="6" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcQuad()">Solve</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"x = (−b ± √(b²−4ac)) / 2a"
+};
+function calcQuad(){
+  const a=parseFloat(document.getElementById("qa").value);
+  const b=parseFloat(document.getElementById("qb").value);
+  const c=parseFloat(document.getElementById("qc").value);
+  if([a,b,c].some(isNaN)||a===0)return setResult([{l:"Error",v:"a cannot be 0"}]);
+  const D=b*b-4*a*c;
+  if(D>0){const x1=(-b+Math.sqrt(D))/(2*a),x2=(-b-Math.sqrt(D))/(2*a);setResult([{l:"Discriminant",v:fmt(D)},{l:"x₁",v:fmt(x1)},{l:"x₂",v:fmt(x2)},{l:"Vertex x",v:fmt(-b/(2*a))}]);}
+  else if(D===0){setResult([{l:"Discriminant",v:"0 (one solution)"},{l:"x",v:fmt(-b/(2*a))}]);}
+  else{const re=-b/(2*a),im=Math.sqrt(-D)/(2*a);setResult([{l:"Discriminant",v:fmt(D)+" (complex)"},{l:"x₁",v:`${fmt(re)} + ${fmt(im)}i`},{l:"x₂",v:`${fmt(re)} − ${fmt(im)}i`}]);}
+}
+
+// ─────────────────── PYTHAGOREAN ─────────────────────────────────
+IMPLS["Pythagorean Theorem"] = {
+  html:`<div class="field-row"><label>Find</label><select id="pyth-find"><option value="c">Hypotenuse (c)</option><option value="a">Side a</option><option value="b">Side b</option></select></div>
+  <div class="generic-inputs">
+  <div class="field-row"><label>Side a</label><input type="number" id="pyth-a" placeholder="3" step="any"></div>
+  <div class="field-row"><label>Side b</label><input type="number" id="pyth-b" placeholder="4" step="any"></div>
+  <div class="field-row"><label>Hypotenuse c (if known)</label><input type="number" id="pyth-c" placeholder="" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcPyth()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"a² + b² = c²"
+};
+function calcPyth(){
+  const find=document.getElementById("pyth-find").value;
+  const a=parseFloat(document.getElementById("pyth-a").value);
+  const b=parseFloat(document.getElementById("pyth-b").value);
+  const c=parseFloat(document.getElementById("pyth-c").value);
+  let res,area;
+  if(find==="c"&&!isNaN(a)&&!isNaN(b)){res=Math.sqrt(a*a+b*b);area=0.5*a*b;setResult([{l:"Hypotenuse c",v:fmt(res)},{l:"Area",v:fmt(area)},{l:"Perimeter",v:fmt(a+b+res)}]);}
+  else if(find==="a"&&!isNaN(b)&&!isNaN(c)){res=Math.sqrt(c*c-b*b);setResult([{l:"Side a",v:fmt(res)}]);}
+  else if(find==="b"&&!isNaN(a)&&!isNaN(c)){res=Math.sqrt(c*c-a*a);setResult([{l:"Side b",v:fmt(res)}]);}
+  else setResult([{l:"Error",v:"Fill in the two known sides"}]);
+}
+
+// ─────────────────── AREA CALCULATORS ─────────────────────────────
+IMPLS["Area of Circle"] = {
+  html:`<div class="field-row"><label>Radius</label><input type="number" id="ar-r" placeholder="5" step="any"></div>
+  <div class="field-row"><label>Unit</label><select id="ar-u"><option>m</option><option>cm</option><option>ft</option><option>in</option><option>yd</option></select></div>
+  <button class="calc-btn" onclick="calcAreaCircle()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"A = π r²,  C = 2πr"
+};
+function calcAreaCircle(){
+  const r=parseFloat(document.getElementById("ar-r").value);
+  const u=document.getElementById("ar-u").value;
+  if(isNaN(r)||r<0)return setResult([{l:"Error",v:"Enter radius"}]);
+  setResult([{l:"Area",v:fmt(Math.PI*r*r)+" "+u+"²"},{l:"Circumference",v:fmt(2*Math.PI*r)+" "+u},{l:"Diameter",v:fmt(2*r)+" "+u}]);
+}
+
+IMPLS["Area of Rectangle"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Length</label><input type="number" id="rect-l" placeholder="10" step="any"></div>
+  <div class="field-row"><label>Width</label><input type="number" id="rect-w" placeholder="5" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcRect()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"A = l × w,  P = 2(l+w)"
+};
+function calcRect(){
+  const l=parseFloat(document.getElementById("rect-l").value);
+  const w=parseFloat(document.getElementById("rect-w").value);
+  if(isNaN(l)||isNaN(w))return setResult([{l:"Error",v:"Enter both dimensions"}]);
+  setResult([{l:"Area",v:fmt(l*w)},{l:"Perimeter",v:fmt(2*(l+w))},{l:"Diagonal",v:fmt(Math.sqrt(l*l+w*w))}]);
+}
+
+IMPLS["Area of Triangle"] = {
+  html:`<div class="field-row"><label>Method</label><select id="tri-method" onchange="updateTriMethod()">
+    <option value="base">Base & Height</option><option value="sides">Three Sides (Heron's)</option><option value="trig">Two Sides & Angle</option>
+  </select></div>
+  <div id="tri-inputs"></div>
+  <button class="calc-btn" onclick="calcTriArea()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"A = ½bh  |  Heron: A = √[s(s-a)(s-b)(s-c)]  |  A = ½ab·sin(C)",
+  init:function(){updateTriMethod();}
+};
+function updateTriMethod(){
+  const m=document.getElementById("tri-method")?.value;
+  const d=document.getElementById("tri-inputs");if(!d)return;
+  const opts={
+    base:`<div class="generic-inputs"><div class="field-row"><label>Base</label><input type="number" id="ta1" step="any" placeholder="6"></div><div class="field-row"><label>Height</label><input type="number" id="ta2" step="any" placeholder="4"></div></div>`,
+    sides:`<div class="generic-inputs"><div class="field-row"><label>Side a</label><input type="number" id="ta1" step="any" placeholder="3"></div><div class="field-row"><label>Side b</label><input type="number" id="ta2" step="any" placeholder="4"></div><div class="field-row"><label>Side c</label><input type="number" id="ta3" step="any" placeholder="5"></div></div>`,
+    trig:`<div class="generic-inputs"><div class="field-row"><label>Side a</label><input type="number" id="ta1" step="any" placeholder="5"></div><div class="field-row"><label>Side b</label><input type="number" id="ta2" step="any" placeholder="7"></div><div class="field-row"><label>Included Angle (°)</label><input type="number" id="ta3" step="any" placeholder="60"></div></div>`
+  };
+  d.innerHTML=opts[m]||"";
+}
+function calcTriArea(){
+  const m=document.getElementById("tri-method").value;
+  const a=parseFloat(document.getElementById("ta1")?.value);
+  const b=parseFloat(document.getElementById("ta2")?.value);
+  const c=parseFloat(document.getElementById("ta3")?.value);
+  if(m==="base"){setResult([{l:"Area",v:fmt(0.5*a*b)}]);}
+  else if(m==="sides"){const s=(a+b+c)/2;setResult([{l:"Area (Heron's)",v:fmt(Math.sqrt(s*(s-a)*(s-b)*(s-c)))},{l:"Perimeter",v:fmt(a+b+c)},{l:"Semi-perimeter",v:fmt(s)}]);}
+  else{setResult([{l:"Area",v:fmt(0.5*a*b*Math.sin(c*Math.PI/180))}]);}
+}
+
+// ─────────────────── SPEED / DISTANCE / TIME ─────────────────────
+IMPLS["Velocity (v=d/t)"] = IMPLS["Rate Problem (d=rt)"] = {
+  html:`<div class="field-row"><label>Solve for</label><select id="sdt-find">
+    <option value="d">Distance (d = r × t)</option>
+    <option value="r">Speed / Rate (r = d / t)</option>
+    <option value="t">Time (t = d / r)</option>
+  </select></div>
+  <div class="generic-inputs">
+  <div class="field-row"><label>Distance</label><input type="number" id="sdt-d" placeholder="" step="any"></div>
+  <div class="field-row"><label>Speed / Rate</label><input type="number" id="sdt-r" placeholder="" step="any"></div>
+  <div class="field-row"><label>Time</label><input type="number" id="sdt-t" placeholder="" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcSDT()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"d = r × t  |  r = d / t  |  t = d / r"
+};
+function calcSDT(){
+  const find=document.getElementById("sdt-find").value;
+  const d=parseFloat(document.getElementById("sdt-d").value);
+  const r=parseFloat(document.getElementById("sdt-r").value);
+  const t=parseFloat(document.getElementById("sdt-t").value);
+  if(find==="d"&&!isNaN(r)&&!isNaN(t))setResult([{l:"Distance",v:fmt(r*t)}]);
+  else if(find==="r"&&!isNaN(d)&&!isNaN(t))setResult([{l:"Speed",v:fmt(d/t)}]);
+  else if(find==="t"&&!isNaN(d)&&!isNaN(r))setResult([{l:"Time",v:fmt(d/r)}]);
+  else setResult([{l:"Error",v:"Fill in the two known values"}]);
+}
+
+// ─────────────────── SIMPLE INTEREST ─────────────────────────────
+IMPLS["Simple Interest"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Principal ($)</label><input type="number" id="si-p" placeholder="5000" step="any"></div>
+  <div class="field-row"><label>Annual Rate (%)</label><input type="number" id="si-r" placeholder="5" step="any"></div>
+  <div class="field-row"><label>Time (years)</label><input type="number" id="si-t" placeholder="3" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcSI()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"I = P × r × t  |  A = P + I"
+};
+function calcSI(){
+  const P=parseFloat(document.getElementById("si-p").value);
+  const r=parseFloat(document.getElementById("si-r").value)/100;
+  const t=parseFloat(document.getElementById("si-t").value);
+  const I=P*r*t;
+  setResult([{l:"Interest",v:"$"+fmt(I,2)},{l:"Total Amount",v:"$"+fmt(P+I,2)},{l:"Rate of return",v:fmt(r*t*100,2)+"%"}]);
+}
+
+// ─────────────────── CALORIE BURN ─────────────────────────────────
+IMPLS["Calorie Burn (Running)"] = IMPLS["Calories Burned Running"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Weight</label><div style="display:flex;gap:8px"><input type="number" id="cb-w" placeholder="70" step="any" style="flex:1"><select id="cb-wu"><option value="kg">kg</option><option value="lb">lb</option></select></div></div>
+  <div class="field-row"><label>Duration (minutes)</label><input type="number" id="cb-t" placeholder="30" step="any"></div>
+  <div class="field-row"><label>Pace / Intensity</label><select id="cb-int">
+    <option value="7.0">Slow jog (7 METs)</option>
+    <option value="9.8">Moderate run (9.8 METs)</option>
+    <option value="11.0">Fast run (11 METs)</option>
+    <option value="14.0">Sprint (14 METs)</option>
+  </select></div>
+  </div>
+  <button class="calc-btn" onclick="calcCalBurn()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"Calories = MET × weight(kg) × time(hr)"
+};
+function calcCalBurn(){
+  let w=parseFloat(document.getElementById("cb-w").value);
+  const t=parseFloat(document.getElementById("cb-t").value)/60;
+  const MET=parseFloat(document.getElementById("cb-int").value);
+  if(document.getElementById("cb-wu").value==="lb") w*=0.453592;
+  if(isNaN(w)||isNaN(t))return setResult([{l:"Error",v:"Enter valid values"}]);
+  const cal=MET*w*t;
+  setResult([{l:"Calories Burned",v:fmt(cal,0)+" kcal"},{l:"Per Minute",v:fmt(cal/(t*60),1)+" kcal/min"},{l:"Approx. Fat Loss",v:fmt(cal/7700,3)+" kg"}]);
+}
+
+// ─────────────────── pH ───────────────────────────────────────────
+IMPLS["pH Calculator"] = IMPLS["pH from [H+]"] = IMPLS["pH from Ka"] = {
+  html:`<div class="field-row"><label>Mode</label><select id="ph-mode" onchange="updatePhMode()">
+    <option value="h">From [H⁺] concentration (mol/L)</option>
+    <option value="oh">From [OH⁻] concentration</option>
+    <option value="ka">Weak acid: Ka and concentration</option>
+  </select></div>
+  <div id="ph-fields"></div>
+  <button class="calc-btn" onclick="calcPH()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"pH = −log₁₀[H⁺]  |  pOH = −log₁₀[OH⁻]  |  pH + pOH = 14",
+  init:function(){updatePhMode();}
+};
+function updatePhMode(){
+  const m=document.getElementById("ph-mode")?.value;
+  const d=document.getElementById("ph-fields");if(!d)return;
+  const opts={
+    h:`<div class="field-row"><label>[H⁺] (mol/L)</label><input type="number" id="ph1" step="any" placeholder="0.001"></div>`,
+    oh:`<div class="field-row"><label>[OH⁻] (mol/L)</label><input type="number" id="ph1" step="any" placeholder="0.0001"></div>`,
+    ka:`<div class="generic-inputs"><div class="field-row"><label>Ka</label><input type="number" id="ph1" step="any" placeholder="1.8e-5"></div><div class="field-row"><label>Concentration (mol/L)</label><input type="number" id="ph2" step="any" placeholder="0.1"></div></div>`
+  };
+  d.innerHTML=opts[m]||"";
+}
+function calcPH(){
+  const m=document.getElementById("ph-mode").value;
+  const v1=parseFloat(document.getElementById("ph1")?.value);
+  const v2=parseFloat(document.getElementById("ph2")?.value);
+  let pH;
+  if(m==="h") pH=-Math.log10(v1);
+  else if(m==="oh") pH=14+Math.log10(v1);
+  else pH=-Math.log10(Math.sqrt(v1*v2));
+  const pOH=14-pH,H=Math.pow(10,-pH),OH=Math.pow(10,-pOH);
+  const nature=pH<7?"Acidic":pH>7?"Basic":"Neutral";
+  setResult([{l:"pH",v:fmt(pH,4)},{l:"pOH",v:fmt(pOH,4)},{l:"[H⁺]",v:H.toExponential(4)+" mol/L"},{l:"[OH⁻]",v:OH.toExponential(4)+" mol/L"},{l:"Nature",v:nature}]);
+}
+
+// ─────────────────── RUNNING PACE ────────────────────────────────
+IMPLS["Running Pace (min/mile or min/km)"] = IMPLS["5K Finish Time Estimate"] = {
+  html:`<div class="field-row"><label>Solve for</label><select id="pace-find">
+    <option value="time">Finish Time</option><option value="pace">Pace</option><option value="dist">Distance</option>
+  </select></div>
+  <div class="generic-inputs">
+  <div class="field-row"><label>Distance</label><div style="display:flex;gap:8px"><input type="number" id="pace-d" placeholder="5" step="any" style="flex:1"><select id="pace-du"><option value="km">km</option><option value="mi">miles</option></select></div></div>
+  <div class="field-row"><label>Pace (min:sec per unit)</label><div style="display:flex;gap:8px"><input type="number" id="pace-pm" placeholder="5" style="flex:1" min="0" step="1"><span style="align-self:center">:</span><input type="number" id="pace-ps" placeholder="30" style="flex:1" min="0" max="59" step="1"></div></div>
+  <div class="field-row"><label>Time (hh:mm:ss)</label><div style="display:flex;gap:4px"><input type="number" id="pace-th" placeholder="0" style="flex:1" min="0"><span style="align-self:center">:</span><input type="number" id="pace-tm" placeholder="27" style="flex:1" min="0" max="59"><span style="align-self:center">:</span><input type="number" id="pace-ts" placeholder="30" style="flex:1" min="0" max="59"></div></div>
+  </div>
+  <button class="calc-btn" onclick="calcPace()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"Pace = Time / Distance  |  Time = Pace × Distance"
+};
+function calcPace(){
+  const find=document.getElementById("pace-find").value;
+  const dist=parseFloat(document.getElementById("pace-d").value);
+  const paceMin=parseInt(document.getElementById("pace-pm").value)||0;
+  const paceSec=parseInt(document.getElementById("pace-ps").value)||0;
+  const timeH=parseInt(document.getElementById("pace-th").value)||0;
+  const timeM=parseInt(document.getElementById("pace-tm").value)||0;
+  const timeS=parseInt(document.getElementById("pace-ts").value)||0;
+  const paceTotal=paceMin*60+paceSec; // secs per unit
+  const timeTotalSec=timeH*3600+timeM*60+timeS;
+  function secsToHMS(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.round(s%60);return `${h?h+"h ":""}${m}m ${sec}s`;}
+  function secsToMinSec(s){return `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,"0")}`;}
+  if(find==="time"&&!isNaN(dist)&&paceTotal>0){
+    const t=dist*paceTotal;setResult([{l:"Finish Time",v:secsToHMS(t)},{l:"Pace",v:secsToMinSec(paceTotal)+" per unit"},{l:"Speed",v:fmt(3600/paceTotal,2)+" units/hr"}]);
+  } else if(find==="pace"&&!isNaN(dist)&&timeTotalSec>0){
+    const p=timeTotalSec/dist;setResult([{l:"Pace",v:secsToMinSec(p)+" per unit"},{l:"Speed",v:fmt(3600/p,2)+" units/hr"}]);
+  } else setResult([{l:"Error",v:"Fill in the required fields"}]);
+}
+
+// ─────────────────── DISCOUNT ────────────────────────────────────
+IMPLS["Discount Calculator"] = IMPLS["Discount Price"] = IMPLS["Sale Price After %"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Original Price ($)</label><input type="number" id="disc-p" placeholder="199.99" step="any"></div>
+  <div class="field-row"><label>Discount (%)</label><input type="number" id="disc-d" placeholder="25" step="any"></div>
+  <div class="field-row"><label>Sales Tax (%)</label><input type="number" id="disc-t" placeholder="8" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcDiscount()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`
+};
+function calcDiscount(){
+  const p=parseFloat(document.getElementById("disc-p").value)||0;
+  const d=parseFloat(document.getElementById("disc-d").value)||0;
+  const t=parseFloat(document.getElementById("disc-t").value)||0;
+  const discAmt=p*d/100;
+  const sale=p-discAmt;
+  const total=sale*(1+t/100);
+  setResult([{l:"Discount Amount",v:"$"+fmt(discAmt,2)},{l:"Sale Price",v:"$"+fmt(sale,2)},{l:"With Tax",v:"$"+fmt(total,2)},{l:"Savings",v:fmt(d,1)+"%"}]);
+}
+
+// ─────────────────── GRADE NEEDED ────────────────────────────────
+IMPLS["Final Exam Score Needed"] = IMPLS["Grade Calculator"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Current Grade (%)</label><input type="number" id="fn-cur" placeholder="82" step="any"></div>
+  <div class="field-row"><label>Desired Final Grade (%)</label><input type="number" id="fn-des" placeholder="90" step="any"></div>
+  <div class="field-row"><label>Final Exam Weight (%)</label><input type="number" id="fn-wt" placeholder="30" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcFinalNeeded()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"final_needed = (desired − current × (1−w)) / w"
+};
+function calcFinalNeeded(){
+  const cur=parseFloat(document.getElementById("fn-cur").value);
+  const des=parseFloat(document.getElementById("fn-des").value);
+  const wt=parseFloat(document.getElementById("fn-wt").value)/100;
+  const needed=(des-cur*(1-wt))/wt;
+  setResult([{l:"Score Needed on Final",v:fmt(needed,1)+"%"},{l:"Possible?",v:needed<=100?"Yes — achievable!":(needed<=115?"Very difficult":"Not possible with 100% exam")}]);
+}
+
+// ─────────────────── UNIT PRICE ──────────────────────────────────
+IMPLS["Unit Price Comparison"] = IMPLS["Price per Unit"] = {
+  html:`<div id="up-rows">
+  <div class="field-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px">
+    <div><label>Item 1 Price ($)</label><input type="number" class="up-price" step="any" placeholder="3.99"></div>
+    <div><label>Quantity</label><input type="number" class="up-qty" step="any" placeholder="12"></div>
+  </div>
+  <div class="field-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+    <div><label>Item 2 Price ($)</label><input type="number" class="up-price" step="any" placeholder="6.49"></div>
+    <div><label>Quantity</label><input type="number" class="up-qty" step="any" placeholder="24"></div>
+  </div>
+  </div>
+  <button class="calc-btn" onclick="calcUnitPrice()">Compare</button>
+  <div class="result-box" id="result-box"></div>`
+};
+function calcUnitPrice(){
+  const prices=[...document.querySelectorAll(".up-price")].map(i=>parseFloat(i.value)||0);
+  const qtys=[...document.querySelectorAll(".up-qty")].map(i=>parseFloat(i.value)||0);
+  const units=prices.map((p,i)=>qtys[i]>0?p/qtys[i]:Infinity);
+  const best=units.indexOf(Math.min(...units));
+  setResult(prices.map((p,i)=>({l:`Item ${i+1} unit price`,v:"$"+fmt(units[i],4)})).concat([{l:"Best value",v:`Item ${best+1}`}]));
+}
+
+// ─────────────────── CALORIES (TDEE) ─────────────────────────────
+IMPLS["Daily Calorie Need (TDEE)"] = IMPLS["Basal Metabolic Rate (Mifflin-St Jeor)"] = IMPLS["TDEE (Calories Burned per Day)"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Age (years)</label><input type="number" id="tdee-age" placeholder="30" step="1"></div>
+  <div class="field-row"><label>Sex</label><select id="tdee-sex"><option value="m">Male</option><option value="f">Female</option></select></div>
+  <div class="field-row"><label>Weight (kg)</label><input type="number" id="tdee-w" placeholder="70" step="any"></div>
+  <div class="field-row"><label>Height (cm)</label><input type="number" id="tdee-h" placeholder="175" step="any"></div>
+  <div class="field-row"><label>Activity Level</label><select id="tdee-act">
+    <option value="1.2">Sedentary (desk job, no exercise)</option>
+    <option value="1.375">Lightly active (1-3 days/wk)</option>
+    <option value="1.55" selected>Moderately active (3-5 days/wk)</option>
+    <option value="1.725">Very active (6-7 days/wk)</option>
+    <option value="1.9">Extremely active (athlete/physical job)</option>
+  </select></div>
+  </div>
+  <button class="calc-btn" onclick="calcTDEE()">Calculate TDEE</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"BMR (Mifflin) = 10W + 6.25H − 5A + S  |  TDEE = BMR × Activity"
+};
+function calcTDEE(){
+  const age=parseFloat(document.getElementById("tdee-age").value);
+  const sex=document.getElementById("tdee-sex").value;
+  const w=parseFloat(document.getElementById("tdee-w").value);
+  const h=parseFloat(document.getElementById("tdee-h").value);
+  const act=parseFloat(document.getElementById("tdee-act").value);
+  if([age,w,h].some(isNaN))return setResult([{l:"Error",v:"Fill all fields"}]);
+  const s=sex==="m"?5:-161;
+  const bmr=10*w+6.25*h-5*age+s;
+  const tdee=bmr*act;
+  setResult([{l:"BMR",v:fmt(bmr,0)+" kcal/day"},{l:"TDEE",v:fmt(tdee,0)+" kcal/day"},{l:"Weight loss (-500)",v:fmt(tdee-500,0)+" kcal/day"},{l:"Weight gain (+300)",v:fmt(tdee+300,0)+" kcal/day"}]);
+}
+
+// ─────────────────── SALES TAX ────────────────────────────────────
+IMPLS["Sales Tax Calculator"] = IMPLS["Sales Tax Amount"] = IMPLS["Sales Tax Total"] = IMPLS["Total with Tax"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Pre-Tax Amount ($)</label><input type="number" id="tax-a" placeholder="49.99" step="any"></div>
+  <div class="field-row"><label>Tax Rate (%)</label><input type="number" id="tax-r" placeholder="8.5" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcSalesTax()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`
+};
+function calcSalesTax(){
+  const a=parseFloat(document.getElementById("tax-a").value)||0;
+  const r=parseFloat(document.getElementById("tax-r").value)||0;
+  const tax=a*r/100;
+  setResult([{l:"Tax Amount",v:"$"+fmt(tax,2)},{l:"Total",v:"$"+fmt(a+tax,2)}]);
+}
+
+// ─────────────────── MPH ↔ KPH ───────────────────────────────────
+IMPLS["MPH to KPH"] = IMPLS["KPH to MPH"] = IMPLS["Meters per Second to MPH"] = {
+  html:`<div class="field-row"><label>From Unit</label><select id="spd-from"><option value="mph">MPH</option><option value="kph">KPH</option><option value="mps">m/s</option><option value="fps">ft/s</option><option value="knots">Knots</option></select></div>
+  <div class="field-row"><label>Speed</label><input type="number" id="spd-val" placeholder="60" step="any"></div>
+  <button class="calc-btn" onclick="calcSpeed()">Convert</button>
+  <div class="result-box" id="result-box"></div>`,
+  init:function(){const n=state.calc;if(n.includes("KPH to"))document.getElementById("spd-from").value="kph";else if(n.includes("m/s")||n.includes("Meters"))document.getElementById("spd-from").value="mps";}
+};
+function calcSpeed(){
+  const from=document.getElementById("spd-from").value;
+  const v=parseFloat(document.getElementById("spd-val").value);
+  if(isNaN(v))return setResult([{l:"Error",v:"Enter a speed"}]);
+  const toMPS={mph:v*0.44704,kph:v/3.6,mps:v,fps:v*0.3048,knots:v*0.514444};
+  const mps=toMPS[from];
+  setResult([{l:"m/s",v:fmt(mps,4)},{l:"KPH",v:fmt(mps*3.6,4)},{l:"MPH",v:fmt(mps/0.44704,4)},{l:"Knots",v:fmt(mps/0.514444,4)},{l:"ft/s",v:fmt(mps/0.3048,4)}]);
+}
+
+// ─────────────────── HEART RATE ZONES ────────────────────────────
+IMPLS["Heart Rate Zones (Karvonen)"] = IMPLS["Maximum Heart Rate (220−Age)"] = IMPLS["Target Heart Rate"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Age</label><input type="number" id="hr-age" placeholder="30" step="1"></div>
+  <div class="field-row"><label>Resting Heart Rate (bpm)</label><input type="number" id="hr-rhr" placeholder="65" step="1"></div>
+  </div>
+  <button class="calc-btn" onclick="calcHRZones()">Calculate Zones</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"HRmax = 220 − age  |  HR reserve = HRmax − RHR  |  Zone = RHR + (HRR × %)"
+};
+function calcHRZones(){
+  const age=parseInt(document.getElementById("hr-age").value)||30;
+  const rhr=parseInt(document.getElementById("hr-rhr").value)||65;
+  const max=220-age;
+  const hrr=max-rhr;
+  const z=(lo,hi)=>`${Math.round(rhr+hrr*lo)} – ${Math.round(rhr+hrr*hi)} bpm`;
+  setResult([{l:"Max Heart Rate",v:max+" bpm"},{l:"HR Reserve",v:hrr+" bpm"},{l:"Zone 1 (50–60%)",v:z(.5,.6)},{l:"Zone 2 (60–70%)",v:z(.6,.7)},{l:"Zone 3 (70–80%)",v:z(.7,.8)},{l:"Zone 4 (80–90%)",v:z(.8,.9)},{l:"Zone 5 (90–100%)",v:z(.9,1.0)}]);
+}
+
+// ─────────────────── LENGTH CONVERT ──────────────────────────────
+IMPLS["Meters to Feet"] = IMPLS["Feet to Meters"] = IMPLS["Inches to Centimeters"] = IMPLS["Centimeters to Inches"] = IMPLS["Miles to Kilometers"] = IMPLS["Kilometers to Miles"] = {
+  html:`<div class="field-row"><label>From Unit</label><select id="len-from">
+    <option value="m">Meters (m)</option><option value="cm">Centimeters (cm)</option>
+    <option value="mm">Millimeters (mm)</option><option value="km">Kilometers (km)</option>
+    <option value="in">Inches (in)</option><option value="ft">Feet (ft)</option>
+    <option value="yd">Yards (yd)</option><option value="mi">Miles (mi)</option>
+    <option value="nmi">Nautical Miles</option>
+  </select></div>
+  <div class="field-row"><label>Value</label><input type="number" id="len-val" placeholder="1" step="any"></div>
+  <button class="calc-btn" onclick="calcLen()">Convert All</button>
+  <div class="result-box" id="result-box"></div>`,
+  init:function(){const n=state.calc;const map={"Feet to Meters":"ft","Meters to Feet":"m","Inches to Centimeters":"in","Centimeters to Inches":"cm","Miles to Kilometers":"mi","Kilometers to Miles":"km"};const v=map[n];if(v&&document.getElementById("len-from"))document.getElementById("len-from").value=v;}
+};
+function calcLen(){
+  const from=document.getElementById("len-from").value;
+  const v=parseFloat(document.getElementById("len-val").value);
+  if(isNaN(v))return setResult([{l:"Error",v:"Enter a value"}]);
+  const toM={m:v,cm:v/100,mm:v/1000,km:v*1000,in:v*0.0254,ft:v*0.3048,yd:v*0.9144,mi:v*1609.344,nmi:v*1852};
+  const m=toM[from];
+  setResult([{l:"Meters",v:fmt(m,6)+" m"},{l:"Centimeters",v:fmt(m*100,4)+" cm"},{l:"Feet",v:fmt(m/0.3048,6)+" ft"},{l:"Inches",v:fmt(m/0.0254,4)+" in"},{l:"Kilometers",v:fmt(m/1000,6)+" km"},{l:"Miles",v:fmt(m/1609.344,6)+" mi"},{l:"Nautical Miles",v:fmt(m/1852,6)+" nmi"}]);
+}
+
+// ─────────────────── WEIGHT CONVERT ──────────────────────────────
+IMPLS["Pounds to Kilograms"] = IMPLS["Kilograms to Pounds"] = IMPLS["Ounces to Grams"] = IMPLS["Grams to Ounces"] = {
+  html:`<div class="field-row"><label>From Unit</label><select id="wt-from">
+    <option value="kg">Kilograms (kg)</option><option value="g">Grams (g)</option>
+    <option value="mg">Milligrams (mg)</option><option value="lb">Pounds (lb)</option>
+    <option value="oz">Ounces (oz)</option><option value="st">Stone (st)</option>
+    <option value="t">Metric Tons (t)</option>
+  </select></div>
+  <div class="field-row"><label>Value</label><input type="number" id="wt-val" placeholder="1" step="any"></div>
+  <button class="calc-btn" onclick="calcWt()">Convert All</button>
+  <div class="result-box" id="result-box"></div>`,
+  init:function(){const n=state.calc;const map={"Pounds to Kilograms":"lb","Kilograms to Pounds":"kg","Ounces to Grams":"oz","Grams to Ounces":"g"};const v=map[n];if(v)document.getElementById("wt-from").value=v;}
+};
+function calcWt(){
+  const from=document.getElementById("wt-from").value;
+  const v=parseFloat(document.getElementById("wt-val").value);
+  if(isNaN(v))return setResult([{l:"Error",v:"Enter a value"}]);
+  const toKg={kg:v,g:v/1000,mg:v/1e6,lb:v*0.453592,oz:v*0.0283495,st:v*6.35029,t:v*1000};
+  const kg=toKg[from];
+  setResult([{l:"Kilograms",v:fmt(kg,6)+" kg"},{l:"Grams",v:fmt(kg*1000,4)+" g"},{l:"Pounds",v:fmt(kg/0.453592,6)+" lb"},{l:"Ounces",v:fmt(kg/0.0283495,4)+" oz"},{l:"Stone",v:fmt(kg/6.35029,4)+" st"},{l:"Metric Tons",v:fmt(kg/1000,8)+" t"}]);
+}
+
+// ─────────────────── CAP RATE ────────────────────────────────────
+IMPLS["Cap Rate"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Net Operating Income (NOI) $/yr</label><input type="number" id="cap-noi" placeholder="24000" step="any"></div>
+  <div class="field-row"><label>Property Value ($)</label><input type="number" id="cap-val" placeholder="300000" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcCapRate()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"Cap Rate = NOI / Property Value × 100%"
+};
+function calcCapRate(){
+  const noi=parseFloat(document.getElementById("cap-noi").value)||0;
+  const val=parseFloat(document.getElementById("cap-val").value)||0;
+  if(!val)return setResult([{l:"Error",v:"Enter property value"}]);
+  setResult([{l:"Cap Rate",v:fmt(noi/val*100,2)+"%"},{l:"Gross Yield",v:fmt(noi/val*100,2)+"%"},{l:"Implied Value at 5% cap",v:"$"+fmt(noi/0.05,0)},{l:"Implied Value at 8% cap",v:"$"+fmt(noi/0.08,0)}]);
+}
+
+// ─────────────────── BINARY ──────────────────────────────────────
+IMPLS["Binary to Decimal"] = IMPLS["Decimal to Binary"] = IMPLS["Hexadecimal to Decimal"] = IMPLS["Decimal to Hexadecimal"] = IMPLS["Base-N Converter"] = {
+  html:`<div class="field-row"><label>Input Value</label><input type="text" id="base-in" placeholder="1010" spellcheck="false"></div>
+  <div class="field-row"><label>From Base</label><select id="base-from"><option value="10">Decimal (10)</option><option value="2">Binary (2)</option><option value="16">Hexadecimal (16)</option><option value="8">Octal (8)</option></select></div>
+  <button class="calc-btn" onclick="calcBase()">Convert</button>
+  <div class="result-box" id="result-box"></div>`,
+  init:function(){const n=state.calc;if(n.includes("Binary to Decimal"))document.getElementById("base-from").value="2";else if(n.includes("Hexadecimal to Decimal")||n.includes("Hex to"))document.getElementById("base-from").value="16";else if(n.includes("Octal to"))document.getElementById("base-from").value="8";}
+};
+function calcBase(){
+  const v=document.getElementById("base-in").value.trim();
+  const base=parseInt(document.getElementById("base-from").value);
+  const dec=parseInt(v,base);
+  if(isNaN(dec))return setResult([{l:"Error",v:"Invalid input for selected base"}]);
+  setResult([{l:"Decimal",v:dec.toString()},{l:"Binary",v:dec.toString(2)},{l:"Hexadecimal",v:"0x"+dec.toString(16).toUpperCase()},{l:"Octal",v:"0o"+dec.toString(8)}]);
+}
+
+// ─────────────────── Ohm's Law ────────────────────────────────────
+IMPLS["Ohm's Law (V=IR)"] = {
+  html:`<div class="field-row"><label>Solve for</label><select id="ohm-find">
+    <option value="V">Voltage (V)</option><option value="I">Current (I)</option><option value="R">Resistance (R)</option><option value="P">Power (P)</option>
+  </select></div>
+  <div class="generic-inputs">
+  <div class="field-row"><label>Voltage (V)</label><input type="number" id="ohm-v" placeholder="" step="any"></div>
+  <div class="field-row"><label>Current (A)</label><input type="number" id="ohm-i" placeholder="" step="any"></div>
+  <div class="field-row"><label>Resistance (Ω)</label><input type="number" id="ohm-r" placeholder="" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcOhm()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"V = I×R  |  I = V/R  |  R = V/I  |  P = V×I = I²R = V²/R"
+};
+function calcOhm(){
+  const V=parseFloat(document.getElementById("ohm-v").value);
+  const I=parseFloat(document.getElementById("ohm-i").value);
+  const R=parseFloat(document.getElementById("ohm-r").value);
+  let v=V,i=I,r=R;
+  if(!isNaN(V)&&!isNaN(I)){r=V/I;}
+  else if(!isNaN(V)&&!isNaN(R)){i=V/R;}
+  else if(!isNaN(I)&&!isNaN(R)){v=I*R;}
+  else return setResult([{l:"Error",v:"Enter any two values"}]);
+  setResult([{l:"Voltage",v:fmt(v,4)+" V"},{l:"Current",v:fmt(i,4)+" A"},{l:"Resistance",v:fmt(r,4)+" Ω"},{l:"Power",v:fmt(v*i,4)+" W"},{l:"Energy (1 hr)",v:fmt(v*i/1000,4)+" kWh"}]);
+}
+
+// ─────────────────── DATE DIFFERENCE ─────────────────────────────
+IMPLS["Date Difference"] = IMPLS["Days Until Event"] = IMPLS["Time Elapsed"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Start Date</label><input type="date" id="dd-start"></div>
+  <div class="field-row"><label>End Date</label><input type="date" id="dd-end"></div>
+  </div>
+  <button class="calc-btn" onclick="calcDateDiff()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  init:function(){const t=new Date();document.getElementById("dd-start").valueAsDate=t;const e=new Date(t);e.setFullYear(e.getFullYear()+1);document.getElementById("dd-end").valueAsDate=e;}
+};
+function calcDateDiff(){
+  const s=new Date(document.getElementById("dd-start").value);
+  const e=new Date(document.getElementById("dd-end").value);
+  if(isNaN(s)||isNaN(e))return setResult([{l:"Error",v:"Select both dates"}]);
+  const diff=(e-s)/1000;
+  const days=Math.round(diff/86400);
+  let y=e.getFullYear()-s.getFullYear(),m=e.getMonth()-s.getMonth(),d=e.getDate()-s.getDate();
+  if(d<0){m--;d+=new Date(e.getFullYear(),e.getMonth(),0).getDate()}
+  if(m<0){y--;m+=12}
+  setResult([{l:"Total Days",v:Math.abs(days).toLocaleString()},{l:"Years / Months / Days",v:`${Math.abs(y)}y ${Math.abs(m)}m ${Math.abs(d)}d`},{l:"Weeks",v:Math.floor(Math.abs(days)/7).toLocaleString()},{l:"Hours",v:(Math.abs(days)*24).toLocaleString()},{l:"Direction",v:days>=0?"Future":"Past"}]);
+}
+
+// ─────────────────── ROI ──────────────────────────────────────────
+IMPLS["Return on Investment (ROI)"] = IMPLS["Real Estate ROI"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Initial Investment ($)</label><input type="number" id="roi-i" placeholder="10000" step="any"></div>
+  <div class="field-row"><label>Final Value / Return ($)</label><input type="number" id="roi-f" placeholder="13500" step="any"></div>
+  <div class="field-row"><label>Time Period (years)</label><input type="number" id="roi-t" placeholder="3" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcROI()">Calculate ROI</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"ROI = (Gain − Cost) / Cost × 100%  |  CAGR = (FV/PV)^(1/t) − 1"
+};
+function calcROI(){
+  const init=parseFloat(document.getElementById("roi-i").value)||0;
+  const fin=parseFloat(document.getElementById("roi-f").value)||0;
+  const t=parseFloat(document.getElementById("roi-t").value)||1;
+  const gain=fin-init;
+  const roi=gain/init*100;
+  const cagr=(Math.pow(fin/init,1/t)-1)*100;
+  setResult([{l:"Net Gain / Loss",v:"$"+fmt(gain,2)},{l:"ROI",v:fmt(roi,2)+"%"},{l:"Annualized (CAGR)",v:fmt(cagr,2)+"%"}]);
+}
+
+// ─────────────────── POPULATION GROWTH ───────────────────────────
+IMPLS["Population Growth Rate"] = IMPLS["Exponential Growth"] = IMPLS["Bacterial Growth Rate (μ)"] = {
+  html:`<div class="generic-inputs">
+  <div class="field-row"><label>Initial Population (P₀)</label><input type="number" id="pg-p0" placeholder="1000" step="any"></div>
+  <div class="field-row"><label>Growth Rate (% per period)</label><input type="number" id="pg-r" placeholder="3.5" step="any"></div>
+  <div class="field-row"><label>Time Periods</label><input type="number" id="pg-t" placeholder="10" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcPopGrowth()">Calculate</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"P(t) = P₀ × e^(r×t)  |  Doubling time = ln(2)/r"
+};
+function calcPopGrowth(){
+  const P0=parseFloat(document.getElementById("pg-p0").value)||0;
+  const r=parseFloat(document.getElementById("pg-r").value)/100;
+  const t=parseFloat(document.getElementById("pg-t").value)||0;
+  const Pt=P0*Math.exp(r*t);
+  const dbl=Math.log(2)/r;
+  setResult([{l:"Population at t",v:fmt(Pt,2).toLocaleString()},{l:"Growth",v:"×"+fmt(Pt/P0,3)},{l:"Doubling time",v:fmt(dbl,2)+" periods"},{l:"Tripling time",v:fmt(Math.log(3)/r,2)+" periods"}]);
+}
+
+// ─────────────────── Ideal Gas ────────────────────────────────────
+IMPLS["Ideal Gas Law (PV=nRT)"] = IMPLS["Ideal Gas Law"] = {
+  html:`<p style="color:var(--muted);font-size:13px;margin-bottom:16px">PV = nRT — enter any three to solve for the fourth.</p>
+  <div class="generic-inputs">
+  <div class="field-row"><label>Pressure (atm)</label><input type="number" id="ig-p" placeholder="" step="any"></div>
+  <div class="field-row"><label>Volume (L)</label><input type="number" id="ig-v" placeholder="" step="any"></div>
+  <div class="field-row"><label>Moles (n)</label><input type="number" id="ig-n" placeholder="" step="any"></div>
+  <div class="field-row"><label>Temperature (K)</label><input type="number" id="ig-t" placeholder="" step="any"></div>
+  </div>
+  <button class="calc-btn" onclick="calcIdealGas()">Solve</button>
+  <div class="result-box" id="result-box"></div>`,
+  formula:"PV = nRT  |  R = 0.08206 L·atm/(mol·K)"
+};
+function calcIdealGas(){
+  const R=0.082057;
+  const P=parseFloat(document.getElementById("ig-p").value);
+  const V=parseFloat(document.getElementById("ig-v").value);
+  const n=parseFloat(document.getElementById("ig-n").value);
+  const T=parseFloat(document.getElementById("ig-t").value);
+  const known=[P,V,n,T].filter(x=>!isNaN(x));
+  if(known.length<3)return setResult([{l:"Error",v:"Enter at least 3 values"}]);
+  let res;
+  if(isNaN(P))res=[{l:"Pressure",v:fmt(n*R*T/V,6)+" atm"}];
+  else if(isNaN(V))res=[{l:"Volume",v:fmt(n*R*T/P,6)+" L"}];
+  else if(isNaN(n))res=[{l:"Moles",v:fmt(P*V/(R*T),6)+" mol"}];
+  else res=[{l:"Temperature",v:fmt(P*V/(n*R),4)+" K"},{l:"°C",v:fmt(P*V/(n*R)-273.15,4)+" °C"}];
+  setResult(res);
+}
+
+// ─────────────────── util ─────────────────────────────────────────
+function slugify(s){return s.toLowerCase().replace(/[^a-z0-9]/g,"-")}
+function esc(s){return (s||"").replace(/'/g,"\\'")}
+
+// ─────────────────── TRANSLATION ──────────────────────────────────
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'es,fr,de,it,pt,zh-CN,ja,ko,ar,ru,hi',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+
+function toggleLangPanel() {
+  const panel   = document.getElementById('lang-panel');
+  const trigger = document.getElementById('lang-trigger');
+  const open    = panel.classList.toggle('open');
+  trigger.classList.toggle('open', open);
+}
+
+// Close panel when clicking outside
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('lang-dropdown');
+  if (dd && !dd.contains(e.target)) {
+    document.getElementById('lang-panel').classList.remove('open');
+    document.getElementById('lang-trigger').classList.remove('open');
+  }
+});
+
+function pickLang(el) {
+  const lang   = el.dataset.lang;
+  const flag   = el.dataset.flag;
+  const name   = el.dataset.name;
+  const native = el.dataset.native;
+
+  // Update trigger display
+  document.getElementById('lt-flag').src = `https://flagcdn.com/28x21/${flag}.png`;
+  document.getElementById('lt-flag').alt = flag.toUpperCase();
+  document.getElementById('lt-name').textContent = name + (native && native !== name ? ' / ' + native : '');
+
+  // Mark active
+  document.querySelectorAll('.lang-opt').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+
+  // Close panel
+  document.getElementById('lang-panel').classList.remove('open');
+  document.getElementById('lang-trigger').classList.remove('open');
+
+  // Trigger translation
+  translatePage(lang);
+}
+
+function translatePage(lang) {
+  if (!lang || lang === 'en') {
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname;
+    location.reload();
+    return;
+  }
+  document.cookie = 'googtrans=/en/' + lang + '; path=/';
+  document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + location.hostname;
+  const tryTranslate = () => {
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo) { combo.value = lang; combo.dispatchEvent(new Event('change')); }
+  };
+  const existing = document.querySelector('.goog-te-combo');
+  if (existing) { tryTranslate(); }
+  else if (!document.getElementById('gt-script')) {
+    const s = document.createElement('script');
+    s.id  = 'gt-script';
+    s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    s.onload = () => setTimeout(tryTranslate, 900);
+    document.head.appendChild(s);
+  }
+}
+
+// ─── init ─────────────────────────────────────────────────────────
+goHome();
+</script>
+</body>
+</html>
+
+
