@@ -1,0 +1,9 @@
+﻿{
+  "name": "calculator-4-me",
+  "version": "1.0.0",
+  "description": "Calculator 4 Me - 3854 calculators single-page app",
+  "scripts": {
+    "build": "echo No build step needed"
+  },
+  "homepage": "."
+}
